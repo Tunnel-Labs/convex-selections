@@ -8,6 +8,8 @@ export type SelectInputFromDataModel<$DataModel, $TableName extends string> = {
 		// @ts-expect-error: works
 		NonNullable<$DataModel[$TableName]['document'][K]> extends Array<infer $Item> ?
 			NonNullable<$Item> extends GenericId<infer $SelectedTableName> ?
+				$SelectedTableName extends $TableName ?
+					true :
 				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
 			NonNullable<$Item> extends RelationArray<infer $SelectedTableName> ?
 				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
@@ -17,6 +19,8 @@ export type SelectInputFromDataModel<$DataModel, $TableName extends string> = {
 
 		// @ts-expect-error: works
 		NonNullable<$DataModel[$TableName]['document'][K]> extends GenericId<infer $SelectedTableName> ?
+			$SelectedTableName extends $TableName ?
+				true :
 			{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
 		// @ts-expect-error: works
 		NonNullable<$DataModel[$TableName]['document'][K]> extends RelationArray<infer $SelectedTableName> ?
@@ -42,19 +46,45 @@ export type SelectOutputFromDataModel<
 				$DataModel[$TableName]['document'][K] :
 			never :
 
-		$Select[K] extends { select: infer $NestedSelect extends SelectInputFromDataModel<$DataModel, any> } ?
+		$Select[K] extends { select: infer $NestedSelect } ?
 			// @ts-expect-error: works
 			K extends keyof $DataModel[$TableName]['document'] ?
 				// @ts-expect-error: works
 				NonNullable<$DataModel[$TableName]['document'][K]> extends GenericId<infer $RefTableName>[] ?
-					SelectOutputFromDataModel<$DataModel, $RefTableName, $NestedSelect>[] |
+					SelectOutputFromDataModel<
+						$DataModel,
+						$RefTableName,
+						// @ts-expect-error: works
+						$NestedSelect
+					>[] |
 					// @ts-expect-error: works
 					(null extends $DataModel[$TableName]['document'][K] ? null : never) :
 				// @ts-expect-error: works
+				NonNullable<$DataModel[$TableName]['document'][K]> extends RelationArray<infer $RefTableName> ?
+					SelectOutputFromDataModel<
+						$DataModel,
+						$RefTableName,
+						// @ts-expect-error: works
+						$NestedSelect
+					>[] :
+				// @ts-expect-error: works
 				NonNullable<$DataModel[$TableName]['document'][K]> extends GenericId<infer $RefTableName> ?
-					SelectOutputFromDataModel<$DataModel, $RefTableName, $NestedSelect> |
+					SelectOutputFromDataModel<
+						$DataModel,
+						$RefTableName,
+						// @ts-expect-error: works
+						$NestedSelect
+					> |
 					// @ts-expect-error: works
-					(null extends NonNullable<$DataModel[$TableName]['document'][K]> ? null : never) :
+					(null extends $DataModel[$TableName]['document'][K] ? null : never) :
+				// @ts-expect-error: works
+				NonNullable<$DataModel[$TableName]['document'][K]> extends Relation<infer $RefTableName> ?
+					SelectOutputFromDataModel<
+						$DataModel,
+						$RefTableName,
+						// @ts-expect-error: works
+						$NestedSelect
+					> :
 				never :
 			never :
 		never
