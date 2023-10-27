@@ -37,7 +37,7 @@ export type SelectOutputFromDataModel<
 	$DataModel,
 	$TableName extends string,
 	$Select extends SelectInputFromDataModel<$DataModel, $TableName>
-> = {
+> = { __tableName?: $TableName } & {
 	[K in keyof $Select]:
 		$Select[K] extends true ?
 			// @ts-expect-error: works
