@@ -1,1 +1,1 @@
-export { vRelation } from './utils/relation.js';
+export { vRelation, vRelationArray } from './utils/relation.js';
