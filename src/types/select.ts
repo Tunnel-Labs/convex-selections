@@ -1,5 +1,5 @@
-import type { GenericId } from 'convex/values'
-import type { Relation } from '~/types/relation.js';
+import type { GenericId } from 'convex/values';
+import type { Relation, RelationArray } from '~/types/relation.js';
 
 // prettier-ignore
 export type SelectInputFromDataModel<$DataModel, $TableName extends string> = {
@@ -9,12 +9,17 @@ export type SelectInputFromDataModel<$DataModel, $TableName extends string> = {
 		NonNullable<$DataModel[$TableName]['document'][K]> extends Array<infer $Item> ?
 			NonNullable<$Item> extends GenericId<infer $SelectedTableName> ?
 				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
+			NonNullable<$Item> extends RelationArray<infer $SelectedTableName> ?
+				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
 			NonNullable<$Item> extends Relation<infer $SelectedTableName> ?
 				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
 			true :
 
 		// @ts-expect-error: works
 		NonNullable<$DataModel[$TableName]['document'][K]> extends GenericId<infer $SelectedTableName> ?
+			{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
+		// @ts-expect-error: works
+		NonNullable<$DataModel[$TableName]['document'][K]> extends RelationArray<infer $SelectedTableName> ?
 			{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
 		// @ts-expect-error: works
 		NonNullable<$DataModel[$TableName]['document'][K]> extends Relation<infer $SelectedTableName> ?
