@@ -34,7 +34,7 @@ export type SelectOutputFromDataModel<
 			// @ts-expect-error: works
 			K extends keyof $DataModel[$TableName]['document'] ?
 				// @ts-expect-error: works
-				$DataModel[$TableName]['document'] :
+				$DataModel[$TableName]['document'][K] :
 			never :
 
 		$Select[K] extends { select: infer $NestedSelect extends SelectInputFromDataModel<$DataModel, any> } ?
