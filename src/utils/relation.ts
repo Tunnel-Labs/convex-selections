@@ -18,12 +18,18 @@ export function vRelation<$ForeignTable>(foreignTableName: string) {
 	};
 }
 
-export function vRelationArray<$ForeignTable>(foreignTableName: $ForeignTable) {
+export function vRelationArray<$ForeignTable>(foreignTableName: string) {
 	return {
 		withIndex<
 			$Index extends keyof GetIndexesFromTable<$ForeignTable> & string,
-			$IndexFields extends GetIndexesFromTable<$ForeignTable>[$Index]
-		>(index: $Index, indexFields: $IndexFields) {
+			$IndexFields extends GetIndexesFromTable<$ForeignTable>[$Index],
+			$IndexFieldsWithoutLast extends $IndexFields extends [
+				...infer $IndexFieldsWithoutLast,
+				infer _$LastIndexField
+			]
+				? $IndexFieldsWithoutLast
+				: never
+		>(index: $Index, indexFields: $IndexFieldsWithoutLast) {
 			return v.optional(
 				v.array(
 					v.literal(
