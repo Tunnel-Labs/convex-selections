@@ -1,6 +1,6 @@
 export type Relation<$TableName extends string> =
-	| `__RELATION__:${$TableName}:${string}`
+	| `__RELATION__:${$TableName}`
 	| undefined;
 export type RelationArray<$TableName extends string> =
-	| `__RELATION__:${$TableName}:${string}`[]
+	| `__RELATION__:${$TableName}`[]
 	| undefined;
