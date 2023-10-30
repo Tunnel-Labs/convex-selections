@@ -2,7 +2,7 @@
 	"name": "convex-selections",
 	"root": true,
 	"type": "module",
-	"version": "0.0.15",
+	"version": "0.0.17",
 	"exports": {
 		".": "./src/index.ts",
 		"./hashes": "./src/hashes.ts",
