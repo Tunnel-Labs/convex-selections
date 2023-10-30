@@ -84,7 +84,9 @@ export type SelectOutputFromDataModel<
 						$RefTableName,
 						// @ts-expect-error: works
 						$NestedSelect
-					> :
+					> |
+					// @ts-expect-error: works
+					(null extends $DataModel[$TableName]['document'][K] ? null : never) :
 				never :
 			never :
 		never
