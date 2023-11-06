@@ -24,7 +24,7 @@ export type SelectionSelect<
 	$Options
 > =
 	$Definition extends SelectionDefinition<any, infer $SelectionMappings> ?
-		UnionToIntersection<ExpandMapping<$SelectionMappings, $Options>> :
+		UnionToIntersection<ExpandMapping<$SelectionMappings, $Options>> & { id: true } :
 	never;
 
 // prettier-ignore
