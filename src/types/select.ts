@@ -3,7 +3,6 @@ import type { Relation, RelationArray } from '~/types/relation.js';
 
 // prettier-ignore
 export type SelectInputFromDataModel<$DataModel, $TableName extends string> =
-	{ id: true } &
 	{
 		// @ts-expect-error: works
 		[K in keyof $DataModel[$TableName]['document']]?:
@@ -38,7 +37,7 @@ export type SelectInputFromDataModel<$DataModel, $TableName extends string> =
 export type SelectOutputFromDataModel<
 	$DataModel,
 	$TableName extends string,
-	$Select extends SelectInputFromDataModel<$DataModel, $TableName>
+	$Select extends Omit<SelectInputFromDataModel<$DataModel, $TableName>, 'id'>
 > = { __tableName?: $TableName } & {
 	[K in keyof $Select]:
 		$Select[K] extends true ?
