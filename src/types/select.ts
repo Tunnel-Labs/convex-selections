@@ -2,7 +2,12 @@ import type { GenericId } from 'convex/values';
 import type { Relation, RelationArray } from '~/types/relation.js';
 
 // prettier-ignore
-export type SelectInputFromDataModel<$DataModel, $TableName extends string> =
+export type SelectInputFromDataModel<
+	$DataModel,
+	$TableName extends string,
+	$WithId extends boolean = false
+> =
+	($WithId extends true ? { id: true } : {}) &
 	{
 		// @ts-expect-error: works
 		[K in keyof $DataModel[$TableName]['document']]?:
@@ -11,24 +16,24 @@ export type SelectInputFromDataModel<$DataModel, $TableName extends string> =
 				NonNullable<$Item> extends GenericId<infer $SelectedTableName> ?
 					$SelectedTableName extends $TableName ?
 						true :
-					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
+					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithId> } :
 				NonNullable<$Item> extends RelationArray<infer $SelectedTableName> ?
-					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
+					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithId> } :
 				NonNullable<$Item> extends Relation<infer $SelectedTableName> ?
-					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
+					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithId> } :
 				true :
 
 			// @ts-expect-error: works
 			NonNullable<$DataModel[$TableName]['document'][K]> extends GenericId<infer $SelectedTableName> ?
 				$SelectedTableName extends $TableName ?
 					true :
-				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
+				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithId> } :
 			// @ts-expect-error: works
 			NonNullable<$DataModel[$TableName]['document'][K]> extends RelationArray<infer $SelectedTableName> ?
-				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
+				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithId> } :
 			// @ts-expect-error: works
 			NonNullable<$DataModel[$TableName]['document'][K]> extends Relation<infer $SelectedTableName> ?
-				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
+				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithId> } :
 
 			true
 	};

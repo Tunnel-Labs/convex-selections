@@ -10,30 +10,30 @@ export function createWithSelection<$DataModel>({
 	selectionHashes
 }: {
 	selectionHashes: Record<string, unknown>;
-}) {
-	return function withSelection<
-		$ProcedureCallback extends (selection: string) => any,
-		const Selection extends SelectInputFromDataModel<
-			$DataModel,
-			TableNameFromProcedureCallback<$DataModel, $ProcedureCallback>
-		>
-	>(
-		cb: $ProcedureCallback,
-		selection: Selection
-	): Promise<
-		| (ProcedureReturnType<$ProcedureCallback> extends Array<any>
-				? SelectOutputFromDataModel<
-						$DataModel,
-						TableNameFromProcedureCallback<$DataModel, $ProcedureCallback>,
-						Selection
-				  >[]
-				: SelectOutputFromDataModel<
-						$DataModel,
-						TableNameFromProcedureCallback<$DataModel, $ProcedureCallback>,
-						Selection
-				  >)
-		| (null extends ProcedureReturnType<$ProcedureCallback> ? null : never)
-	> {
+}): <
+	$ProcedureCallback extends (selection: string) => any,
+	const Selection extends SelectInputFromDataModel<
+		$DataModel,
+		TableNameFromProcedureCallback<$DataModel, $ProcedureCallback>
+	>
+>(
+	cb: $ProcedureCallback,
+	selection: Selection
+) => Promise<
+	| (ProcedureReturnType<$ProcedureCallback> extends Array<any>
+			? SelectOutputFromDataModel<
+					$DataModel,
+					TableNameFromProcedureCallback<$DataModel, $ProcedureCallback>,
+					Selection
+			  >[]
+			: SelectOutputFromDataModel<
+					$DataModel,
+					TableNameFromProcedureCallback<$DataModel, $ProcedureCallback>,
+					Selection
+			  >)
+	| (null extends ProcedureReturnType<$ProcedureCallback> ? null : never)
+> {
+	return function withSelection(cb: any, selection: any): any {
 		const selectionHash = hash.sha1(selection);
 		if (selectionHashes[selectionHash] === undefined) {
 			// eslint-disable-next-line no-console -- bruh
