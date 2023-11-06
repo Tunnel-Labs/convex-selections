@@ -2,35 +2,37 @@ import type { GenericId } from 'convex/values';
 import type { Relation, RelationArray } from '~/types/relation.js';
 
 // prettier-ignore
-export type SelectInputFromDataModel<$DataModel, $TableName extends string> = {
-	// @ts-expect-error: works
-	[K in keyof $DataModel[$TableName]['document']]?:
+export type SelectInputFromDataModel<$DataModel, $TableName extends string> =
+	{ id: true } &
+	{
 		// @ts-expect-error: works
-		NonNullable<$DataModel[$TableName]['document'][K]> extends Array<infer $Item> ?
-			NonNullable<$Item> extends GenericId<infer $SelectedTableName> ?
+		[K in keyof $DataModel[$TableName]['document']]?:
+			// @ts-expect-error: works
+			NonNullable<$DataModel[$TableName]['document'][K]> extends Array<infer $Item> ?
+				NonNullable<$Item> extends GenericId<infer $SelectedTableName> ?
+					$SelectedTableName extends $TableName ?
+						true :
+					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
+				NonNullable<$Item> extends RelationArray<infer $SelectedTableName> ?
+					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
+				NonNullable<$Item> extends Relation<infer $SelectedTableName> ?
+					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
+				true :
+
+			// @ts-expect-error: works
+			NonNullable<$DataModel[$TableName]['document'][K]> extends GenericId<infer $SelectedTableName> ?
 				$SelectedTableName extends $TableName ?
 					true :
 				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
-			NonNullable<$Item> extends RelationArray<infer $SelectedTableName> ?
+			// @ts-expect-error: works
+			NonNullable<$DataModel[$TableName]['document'][K]> extends RelationArray<infer $SelectedTableName> ?
 				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
-			NonNullable<$Item> extends Relation<infer $SelectedTableName> ?
+			// @ts-expect-error: works
+			NonNullable<$DataModel[$TableName]['document'][K]> extends Relation<infer $SelectedTableName> ?
 				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
-			true :
 
-		// @ts-expect-error: works
-		NonNullable<$DataModel[$TableName]['document'][K]> extends GenericId<infer $SelectedTableName> ?
-			$SelectedTableName extends $TableName ?
-				true :
-			{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
-		// @ts-expect-error: works
-		NonNullable<$DataModel[$TableName]['document'][K]> extends RelationArray<infer $SelectedTableName> ?
-			{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
-		// @ts-expect-error: works
-		NonNullable<$DataModel[$TableName]['document'][K]> extends Relation<infer $SelectedTableName> ?
-			{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName> } :
-
-		true
-};
+			true
+	};
 
 // prettier-ignore
 export type SelectOutputFromDataModel<
