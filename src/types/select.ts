@@ -5,9 +5,9 @@ import type { Relation, RelationArray } from '~/types/relation.js';
 export type SelectInputFromDataModel<
 	$DataModel,
 	$TableName extends string,
-	$WithId extends boolean = false
+	$WithCid extends boolean = false
 > =
-	($WithId extends true ? { id: true } : {}) &
+	($WithCid extends true ? { cid: true } : {}) &
 	{
 		// @ts-expect-error: works
 		[K in keyof $DataModel[$TableName]['document']]?:
@@ -16,24 +16,24 @@ export type SelectInputFromDataModel<
 				NonNullable<$Item> extends GenericId<infer $SelectedTableName> ?
 					$SelectedTableName extends $TableName ?
 						true :
-					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithId> } :
+					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
 				NonNullable<$Item> extends RelationArray<infer $SelectedTableName> ?
-					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithId> } :
+					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
 				NonNullable<$Item> extends Relation<infer $SelectedTableName> ?
-					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithId> } :
+					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
 				true :
 
 			// @ts-expect-error: works
 			NonNullable<$DataModel[$TableName]['document'][K]> extends GenericId<infer $SelectedTableName> ?
 				$SelectedTableName extends $TableName ?
 					true :
-				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithId> } :
+				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
 			// @ts-expect-error: works
 			NonNullable<$DataModel[$TableName]['document'][K]> extends RelationArray<infer $SelectedTableName> ?
-				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithId> } :
+				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
 			// @ts-expect-error: works
 			NonNullable<$DataModel[$TableName]['document'][K]> extends Relation<infer $SelectedTableName> ?
-				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithId> } :
+				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
 
 			true
 	};
