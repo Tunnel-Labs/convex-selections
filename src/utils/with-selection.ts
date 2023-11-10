@@ -33,8 +33,8 @@ export function createWithSelection<$DataModel>({
 			  >)
 	| (null extends ProcedureReturnType<$ProcedureCallback> ? null : never)
 > {
-	return function withSelection(cb: any, selection: any): any {
-		const selectionHash = sha256(selection);
+	return async function withSelection(cb: any, selection: any): Promise<any> {
+		const selectionHash = await sha256(selection);
 		if (selectionHashes[selectionHash] === undefined) {
 			// eslint-disable-next-line no-console -- bruh
 			console.error(

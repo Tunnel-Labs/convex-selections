@@ -241,14 +241,14 @@ export async function getSelectionHashes({
 	const selectionHashes: Record<string, any> = {};
 
 	for (const selectionObject of selectionObjects) {
-		selectionHashes[sha256(selectionObject)] = selectionObject;
+		selectionHashes[await sha256(selectionObject)] = selectionObject;
 	}
 
 	// Add our complex selections
 	for (const selectionDefinition of Object.values(selectionDefinitions)) {
 		if ((selectionDefinition as any).name.includes('_')) {
 			const selection = (selectionDefinition as any)();
-			selectionHashes[sha256(selection)] = selection;
+			selectionHashes[await sha256(selection)] = selection;
 		}
 	}
 
