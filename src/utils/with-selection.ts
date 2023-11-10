@@ -37,7 +37,11 @@ export function createWithSelection<$DataModel>({
 		const selectionHash = hash.sha1(selection);
 		if (selectionHashes[selectionHash] === undefined) {
 			// eslint-disable-next-line no-console -- bruh
-			console.error('Selection not found in selectionHashes', selection);
+			console.error(
+				'Selection not found in selectionHashes',
+				selection,
+				`(hash: ${selectionHash})`
+			);
 			throw new Error(
 				`Selection hash ${selectionHash} not found in selectionHashes`
 			);
