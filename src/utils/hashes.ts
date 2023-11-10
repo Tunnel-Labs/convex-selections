@@ -10,7 +10,7 @@ import { execa } from 'execa';
 import glob from 'fast-glob';
 import { getMonorepoDirpath } from 'get-monorepo-root';
 import json5 from 'json5';
-import { sha256 } from 'sha-anything';
+import { sha256 } from 'js-sha256';
 import path from 'pathe';
 import sortKeys from 'sort-keys';
 import { rgPath } from '@vscode/ripgrep';
@@ -241,14 +241,18 @@ export async function getSelectionHashes({
 	const selectionHashes: Record<string, any> = {};
 
 	for (const selectionObject of selectionObjects) {
-		selectionHashes[await sha256(selectionObject)] = selectionObject;
+		selectionHashes[
+			sha256(JSON.stringify(sortKeys(selectionObject, { deep: true })))
+		] = selectionObject;
 	}
 
 	// Add our complex selections
 	for (const selectionDefinition of Object.values(selectionDefinitions)) {
 		if ((selectionDefinition as any).name.includes('_')) {
 			const selection = (selectionDefinition as any)();
-			selectionHashes[await sha256(selection)] = selection;
+			selectionHashes[
+				sha256(JSON.stringify(sortKeys(selection, { deep: true })))
+			] = selection;
 		}
 	}
 

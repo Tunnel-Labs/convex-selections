@@ -1,10 +1,11 @@
-import { sha256 } from 'sha-anything';
+import { sha256 } from 'js-sha256';
 import type {
 	SelectInputFromDataModel,
 	SelectOutputFromDataModel
 } from '~/types/select.js';
 import type { TableNameFromProcedureCallback } from '~/types/schema.js';
 import type { ProcedureReturnType } from '~/types/procedure.js';
+import sortKeys from 'sort-keys';
 
 export function createWithSelection<$DataModel>({
 	selectionHashes
@@ -34,7 +35,9 @@ export function createWithSelection<$DataModel>({
 	| (null extends ProcedureReturnType<$ProcedureCallback> ? null : never)
 > {
 	return async function withSelection(cb: any, selection: any): Promise<any> {
-		const selectionHash = await sha256(selection);
+		const selectionHash = sha256(
+			JSON.stringify(sortKeys(selection, { deep: true }))
+		);
 		if (selectionHashes[selectionHash] === undefined) {
 			// eslint-disable-next-line no-console -- bruh
 			console.error(
