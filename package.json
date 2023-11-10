@@ -25,7 +25,7 @@
 		"json5": "^2.2.3",
 		"map-obj": "^5.0.2",
 		"merge": "^2.1.1",
-		"object-hash": "^3.0.0",
+		"sha-anything": "^0.0.4",
 		"pathe": "^1.1.1",
 		"sort-keys": "^5.0.0",
 		"type-fest": "^4.5.0",
@@ -35,7 +35,6 @@
 		"convex": "^1.4.1",
 		"@tunnel/tun": "^0.1.2",
 		"@types/node": "^20.7.1",
-		"@types/object-hash": "^3.0.4",
 		"typescript": "^5.2.2",
 		"lionconfig": "^3.1.1"
 	}

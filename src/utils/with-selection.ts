@@ -1,4 +1,4 @@
-import hash from 'object-hash';
+import { sha256 } from 'sha-anything';
 import type {
 	SelectInputFromDataModel,
 	SelectOutputFromDataModel
@@ -34,7 +34,7 @@ export function createWithSelection<$DataModel>({
 	| (null extends ProcedureReturnType<$ProcedureCallback> ? null : never)
 > {
 	return function withSelection(cb: any, selection: any): any {
-		const selectionHash = hash.sha1(selection);
+		const selectionHash = sha256(selection);
 		if (selectionHashes[selectionHash] === undefined) {
 			// eslint-disable-next-line no-console -- bruh
 			console.error(
