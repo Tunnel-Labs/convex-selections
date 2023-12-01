@@ -1,4 +1,5 @@
 import type { GenericId } from 'convex/values';
+import { Deprecated } from '~/types/deprecated.js';
 import type { Relation, RelationArray } from '~/types/relation.js';
 
 // prettier-ignore
@@ -9,8 +10,14 @@ export type SelectInputFromDataModel<
 > =
 	($WithCid extends true ? { cid: true } : {}) &
 	{
-		// @ts-expect-error: works
-		[K in keyof $DataModel[$TableName]['document']]?:
+		[
+			// @ts-expect-error: works
+			K in keyof $DataModel[$TableName]['document'] as
+				// @ts-expect-error: works
+				$DataModel[$TableName]['document'][K] extends Deprecated ?
+					never :
+				K
+			]?:
 			// @ts-expect-error: works
 			NonNullable<$DataModel[$TableName]['document'][K]> extends Array<infer $Item> ?
 				NonNullable<$Item> extends GenericId<infer $SelectedTableName> ?
