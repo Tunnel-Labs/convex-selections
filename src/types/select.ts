@@ -1,6 +1,6 @@
 import type { GenericId } from 'convex/values';
 import { Deprecated } from '~/types/deprecated.js';
-import type { Relation, RelationArray } from '~/types/relation.js';
+import type { Virtual, VirtualArray } from '~/types/virtual.js';
 
 // prettier-ignore
 export type SelectInputFromDataModel<
@@ -24,9 +24,9 @@ export type SelectInputFromDataModel<
 					$SelectedTableName extends $TableName ?
 						true :
 					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
-				NonNullable<$Item> extends RelationArray<infer $SelectedTableName> ?
+				NonNullable<$Item> extends VirtualArray<infer $SelectedTableName> ?
 					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
-				NonNullable<$Item> extends Relation<infer $SelectedTableName> ?
+				NonNullable<$Item> extends Virtual<infer $SelectedTableName> ?
 					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
 				true :
 
@@ -36,10 +36,10 @@ export type SelectInputFromDataModel<
 					true :
 				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
 			// @ts-expect-error: works
-			NonNullable<$DataModel[$TableName]['document'][K]> extends RelationArray<infer $SelectedTableName> ?
+			NonNullable<$DataModel[$TableName]['document'][K]> extends VirtualArray<infer $SelectedTableName> ?
 				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
 			// @ts-expect-error: works
-			NonNullable<$DataModel[$TableName]['document'][K]> extends Relation<infer $SelectedTableName> ?
+			NonNullable<$DataModel[$TableName]['document'][K]> extends Virtual<infer $SelectedTableName> ?
 				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
 
 			true
@@ -73,7 +73,7 @@ export type SelectOutputFromDataModel<
 					// @ts-expect-error: works
 					(null extends $DataModel[$TableName]['document'][K] ? null : never) :
 				// @ts-expect-error: works
-				NonNullable<$DataModel[$TableName]['document'][K]> extends RelationArray<infer $RefTableName> ?
+				NonNullable<$DataModel[$TableName]['document'][K]> extends VirtualArray<infer $RefTableName> ?
 					SelectOutputFromDataModel<
 						$DataModel,
 						$RefTableName,
@@ -91,7 +91,7 @@ export type SelectOutputFromDataModel<
 					// @ts-expect-error: works
 					(null extends $DataModel[$TableName]['document'][K] ? null : never) :
 				// @ts-expect-error: works
-				NonNullable<$DataModel[$TableName]['document'][K]> extends Relation<infer $RefTableName> ?
+				NonNullable<$DataModel[$TableName]['document'][K]> extends Virtual<infer $RefTableName> ?
 					SelectOutputFromDataModel<
 						$DataModel,
 						$RefTableName,

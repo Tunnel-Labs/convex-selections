@@ -1,2 +1,2 @@
-export { vRelation, vRelationArray } from './utils/relation.js';
+export { vVirtual, vVirtualArray } from './utils/virtual.js';
 export { vDeprecated, vDeprecatedTable } from './utils/deprecated.js';
