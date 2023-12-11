@@ -9,17 +9,17 @@ export function defineSelectionMappings<
 	$TableName extends string
 >(): {
 	set<
-		SelectionMappings extends Record<
+		$SelectionMappings extends Record<
 			`$${string}`,
 			SelectInputFromDataModel<$DataModel, $TableName> & {
-				[K in keyof SelectionMappings]?: boolean;
+				[K in keyof $SelectionMappings]?: boolean;
 			}
 		>
 	>(
-		mappings: () => SelectionMappings
+		mappings: () => $SelectionMappings
 	): () => SelectionDefinition<
 		SelectInputFromDataModel<$DataModel, $TableName>,
-		SelectionMappings
+		$SelectionMappings
 	>;
 } {
 	return {

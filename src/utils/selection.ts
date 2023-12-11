@@ -1,5 +1,5 @@
 import { deepmerge } from 'deepmerge-ts';
-import type { UnionToIntersection } from 'type-fest';
+import type { Exact, UnionToIntersection } from 'type-fest';
 import mapObject, { mapObjectSkip } from 'map-obj';
 import { merge } from 'merge';
 
@@ -9,8 +9,8 @@ import type {
 } from '~/types/selections.js';
 
 export function expandSelections<
-	SelectionMapping extends Record<string, Record<string, unknown>>
->(selectionMapping: SelectionMapping): ExpandSelections<SelectionMapping> {
+	$SelectionMapping extends Record<string, Record<string, unknown>>
+>(selectionMapping: $SelectionMapping): ExpandSelections<$SelectionMapping> {
 	function expandInnerSelection(mapping: Record<string, unknown>): void {
 		for (const mappingKey of Object.keys(mapping)) {
 			if (mappingKey.startsWith('$')) {
@@ -30,36 +30,39 @@ export function expandSelections<
 }
 
 export function createSelectionFunction<
-	Definition extends SelectionDefinition<any, any>
->(selectionDefinition: Definition) {
+	$SelectionDefinition extends SelectionDefinition<any, any>
+>(selectionDefinition: $SelectionDefinition) {
 	const expandedSelections = expandSelections(selectionDefinition as any);
 
 	return function select<
-		const Selections extends (Definition extends SelectionDefinition<
-			infer Select,
-			any
+		const $Selections extends Exact<
+			($SelectionDefinition extends SelectionDefinition<infer Select, any>
+				? Select
+				: never) & {
+				[K in keyof ($SelectionDefinition extends SelectionDefinition<
+					any,
+					infer SelectionMappings
+				>
+					? SelectionMappings
+					: never)]?: boolean | undefined;
+			},
+			$Selections
 		>
-			? Select
-			: never) & {
-			[K in keyof (Definition extends SelectionDefinition<
-				any,
-				infer SelectionMappings
-			>
-				? SelectionMappings
-				: never)]?: boolean | undefined;
-		}
 	>(
-		selections: Selections
+		selections: $Selections
 	): UnionToIntersection<
 		{
-			[SelectionKey in keyof Selections]: SelectionKey extends `$${string}`
+			[$SelectionKey in keyof $Selections]: $SelectionKey extends `$${string}`
 				? ExpandSelections<
-						Definition extends SelectionDefinition<any, infer SelectionMappings>
+						$SelectionDefinition extends SelectionDefinition<
+							any,
+							infer SelectionMappings
+						>
 							? SelectionMappings
 							: never
-				  >[SelectionKey]
-				: Record<SelectionKey, Selections[SelectionKey]>;
-		}[keyof Selections]
+				  >[$SelectionKey]
+				: Record<$SelectionKey, $Selections[$SelectionKey]>;
+		}[keyof $Selections]
 	> {
 		const selectionsArray: any[] = [];
 

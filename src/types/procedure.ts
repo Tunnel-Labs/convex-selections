@@ -1,3 +1,3 @@
 export type ProcedureReturnType<
-	ProcedureCallback extends (selection: any) => any
-> = Awaited<ReturnType<ProcedureCallback>>;
+	$ProcedureCallback extends (selection: any) => any
+> = Awaited<ReturnType<$ProcedureCallback>>;
