@@ -1,12 +1,11 @@
 {
-	"name": "convex-selections",
+	"name": "corvex",
 	"root": true,
 	"type": "module",
-	"version": "0.1.0",
+	"version": "0.0.0",
 	"exports": {
 		".": "./src/index.ts",
-		"./hashes": "./src/hashes.ts",
-		"./validators": "./src/validators.ts"
+		"./hashes": "./src/hashes.ts"
 	},
 	"scripts": {
 		"build": "tun ./scripts/build.ts"
