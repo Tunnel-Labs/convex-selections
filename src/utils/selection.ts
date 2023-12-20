@@ -1,12 +1,10 @@
+import type { AnyDataModel } from 'convex/server';
 import { deepmerge } from 'deepmerge-ts';
-import type { Exact, UnionToIntersection } from 'type-fest';
-import mapObject, { mapObjectSkip } from 'map-obj';
 import { merge } from 'merge';
+import type { Exact, Simplify, UnionToIntersection } from 'type-fest';
 
-import type {
-	SelectionDefinition,
-	ExpandSelections
-} from '~/types/selections.js';
+import type { ExpandSelections } from '~/types/selections.js';
+import type { SelectInputFromDataModel } from '~/types/select.js';
 
 export function expandSelections<
 	$SelectionMapping extends Record<string, Record<string, unknown>>
@@ -30,43 +28,35 @@ export function expandSelections<
 }
 
 export function createSelectionFunction<
-	$SelectionDefinition extends SelectionDefinition<any, any>
->(selectionDefinition: $SelectionDefinition) {
-	const expandedSelections = expandSelections(selectionDefinition as any);
-
-	return function select<
-		const $Selections extends Exact<
-			($SelectionDefinition extends SelectionDefinition<infer Select, any>
-				? Select
-				: never) & {
-				[K in keyof ($SelectionDefinition extends SelectionDefinition<
-					any,
-					infer SelectionMappings
-				>
-					? SelectionMappings
-					: never)]?: boolean | undefined;
-			},
-			$Selections
-		>
-	>(
-		selections: $Selections
-	): UnionToIntersection<
+	$DataModel extends AnyDataModel,
+	$TableName extends string,
+	$Selections extends Record<string, Record<string, unknown>>
+>(
+	selections: $Selections
+): <
+	const $Selection extends Exact<
+		SelectInputFromDataModel<$DataModel, $TableName> & {
+			[K in keyof $Selections]?: boolean | undefined;
+		},
+		$Selection
+	>
+>(
+	selection: $Selection
+) => Simplify<
+	UnionToIntersection<
 		{
-			[$SelectionKey in keyof $Selections]: $SelectionKey extends `$${string}`
-				? ExpandSelections<
-						$SelectionDefinition extends SelectionDefinition<
-							any,
-							infer SelectionMappings
-						>
-							? SelectionMappings
-							: never
-				  >[$SelectionKey]
-				: Record<$SelectionKey, $Selections[$SelectionKey]>;
-		}[keyof $Selections]
-	> {
+			[$SelectionKey in keyof $Selection]: $SelectionKey extends `$${string}`
+				? ExpandSelections<$Selections>[$SelectionKey]
+				: Record<$SelectionKey, $Selection[$SelectionKey]>;
+		}[keyof $Selection]
+	>
+> {
+	const expandedSelections = expandSelections(selections);
+
+	return function select(selection) {
 		const selectionsArray: any[] = [];
 
-		for (const [selectionKey, selectionValue] of Object.entries(selections)) {
+		for (const [selectionKey, selectionValue] of Object.entries(selection)) {
 			if (selectionKey.startsWith('$')) {
 				selectionsArray.push((expandedSelections as any)[selectionKey]);
 			} else {
@@ -76,28 +66,6 @@ export function createSelectionFunction<
 
 		return deepmerge(...selectionsArray) as any;
 	};
-}
-
-export function unscopeSelections<Selections extends Record<string, () => any>>(
-	selections: Selections
-): {
-	[SelectionIdentifier in keyof Selections as SelectionIdentifier extends `${string}_${infer UnscopedIdentifier}`
-		? UnscopedIdentifier
-		: never]: ReturnType<Selections[SelectionIdentifier]>;
-} {
-	return mapObject(selections, (key, selection) => {
-		if (key === 'default') {
-			return mapObjectSkip;
-		}
-
-		const identifier = (key as string).split('_')[1];
-
-		if (identifier === undefined) {
-			throw new Error(`Invalid selection identifier: ${String(key)}`);
-		}
-
-		return [identifier, selection()];
-	}) as any;
 }
 
 export function combineSelections<

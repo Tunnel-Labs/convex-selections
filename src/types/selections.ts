@@ -1,14 +1,6 @@
+import { AnyDataModel } from 'convex/server';
 import type { UnionToIntersection } from 'type-fest';
 import type { SelectInputFromDataModel } from '~/types/select.js';
-
-export interface SelectionDefinition<
-	_$Select,
-	_$SelectionMappings extends Record<`$${string}`, unknown>
-> extends Record<`$${string}`, unknown> {}
-
-export type InferSelectionDefinition<
-	$SelectionDefinitionGetter extends (...args: any) => any
-> = Awaited<ReturnType<$SelectionDefinitionGetter>>;
 
 // prettier-ignore
 export type ExpandMapping<$SelectionMappings, $Options> = {
@@ -18,25 +10,18 @@ export type ExpandMapping<$SelectionMappings, $Options> = {
 		Record<$OptionKey, $Options[$OptionKey]>;
 }[keyof $Options];
 
-// prettier-ignore
-export type SelectionSelect<
-	$Definition extends SelectionDefinition<any, any>,
-	$Options
-> =
-	$Definition extends SelectionDefinition<any, infer $SelectionMappings> ?
-		UnionToIntersection<ExpandMapping<$SelectionMappings, $Options>> :
-	never;
-
-// prettier-ignore
 export type WithOptions<
-	$DataModel,
-	$Definition extends SelectionDefinition<any, any>,
+	$DataModel extends AnyDataModel,
+	$Selections extends Record<string, unknown>,
 	$TableName extends string
-> =
-	$Definition extends SelectionDefinition<any, infer $SelectionMappings> ?
-		SelectInputFromDataModel<$DataModel, $TableName> &
-		{ [Key in keyof $SelectionMappings]?: boolean } :
-	never;
+> = SelectInputFromDataModel<$DataModel, $TableName> & {
+	[Key in keyof $Selections]?: boolean;
+};
+
+export type SelectionSelect<
+	$Selections extends Record<string, unknown>,
+	$Options
+> = UnionToIntersection<ExpandMapping<$Selections, $Options>>;
 
 // prettier-ignore
 export type Selections<$SelectionMappingObject> = keyof {
