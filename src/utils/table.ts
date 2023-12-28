@@ -71,10 +71,43 @@ export function table(
 	documentSchema: Validator<Record<string, any>, false, any>,
 	setTableIndexes: (table: TableDefinition) => TableDefinition
 ): (relations: Record<string, any>) => Table {
-	return (relations) => ({
-		tableName,
-		schema: documentSchema,
-		relations,
-		setTableIndexes
-	});
+	return (relations) => {
+		// @ts-expect-error: Custom property
+		table.onDelete ??= new Map();
+
+		for (const [field, fieldValue] of Object.entries(relations)) {
+			if (!('onDelete' in fieldValue)) continue;
+
+			// We treat the current table as the table that is affected by the deletion
+			const affectedTableName = tableName;
+			const {
+				// The table referenced by the key is considered the "foreign" table which has been deleted
+				tableName: deletedTableName,
+				index: affectedFieldIndex,
+				indexFields: affectedFieldIndexFields,
+				options
+			} = fieldValue;
+			// @ts-expect-error: Custom property
+			if (!table.onDelete.has(deletedTableName)) {
+				// @ts-expect-error: Custom property
+				table.onDelete.set(deletedTableName, {});
+			}
+
+			// When the foreign table is deleted, the affected table
+			// @ts-expect-error: Custom property
+			table.onDelete.get(deletedTableName)[affectedTableName] = {
+				action: options.onDelete,
+				affectedFieldIndex,
+				affectedField: field,
+				affectedFieldIndexFields
+			};
+		}
+
+		return {
+			tableName,
+			schema: documentSchema,
+			relations,
+			setTableIndexes
+		};
+	};
 }
