@@ -8,7 +8,7 @@ import type { Table } from '~/types/table.ts';
 import type { Virtual, VirtualArray } from '~/types/virtual.js';
 
 // prettier-ignore
-export function table<
+declare function table<
 	$TableName extends string,
 	$DocumentSchema extends Validator<Record<string, any>, false, any>,
 	$SetTableIndexes extends (
@@ -80,26 +80,19 @@ export function table(
 
 			// We treat the current table as the table that is affected by the deletion
 			const affectedTableName = tableName;
-			const {
-				// The table referenced by the key is considered the "foreign" table which has been deleted
-				tableName: deletedTableName,
-				index: affectedFieldIndex,
-				indexFields: affectedFieldIndexFields,
-				options
-			} = fieldValue;
+			const { foreignTable, hostIndex, onDelete } = fieldValue;
 			// @ts-expect-error: Custom property
-			if (!table.onDelete.has(deletedTableName)) {
+			if (!table.onDelete.has(foreignTable)) {
 				// @ts-expect-error: Custom property
-				table.onDelete.set(deletedTableName, {});
+				table.onDelete.set(foreignTable, {});
 			}
 
 			// When the foreign table is deleted, the affected table
 			// @ts-expect-error: Custom property
-			table.onDelete.get(deletedTableName)[affectedTableName] = {
-				action: options.onDelete,
-				affectedFieldIndex,
-				affectedField: field,
-				affectedFieldIndexFields
+			table.onDelete.get(foreignTable)[affectedTableName] = {
+				action: onDelete,
+				affectedFieldIndex: hostIndex,
+				affectedField: field
 			};
 		}
 
