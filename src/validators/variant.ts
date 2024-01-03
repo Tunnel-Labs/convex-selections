@@ -1,11 +1,12 @@
 import { v, type Validator } from 'convex/values';
+import { Tagged } from 'type-fest';
 
 /**
 	Deprecated fields are read-only fields. Since we stop writing to them, they can be optional.
 */
 export function vDeprecated<$Type>(
 	_message: string
-): Validator<$Type & { __deprecated__?: true }, true, string> {
+): Validator<Tagged<$Type, '__deprecated__'>, true, string> {
 	return v.optional(v.any()) as any;
 }
 
@@ -21,7 +22,7 @@ export function vNew<$Validator extends Validator<any, any, any>>(
 	validator: $Validator
 ): $Validator extends Validator<infer $TypeScriptType, any, infer $FieldPaths>
 	? Validator<
-			| ($TypeScriptType & { __new__?: true })
+			| Tagged<$TypeScriptType, '__new__'>
 			| undefined
 			| (null extends $TypeScriptType ? null : never),
 			true,

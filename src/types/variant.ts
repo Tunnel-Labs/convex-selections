@@ -1,12 +1,28 @@
+import { Tagged, UnwrapTagged } from 'type-fest';
+
+export type IsNew<$Value> = NonNullable<$Value> extends Tagged<
+	NonNullable<$Value>,
+	'__new__'
+>
+	? true
+	: false;
+
+export type IsDeprecated<$Value> = NonNullable<$Value> extends Tagged<
+	NonNullable<$Value>,
+	'__deprecated__'
+>
+	? true
+	: false;
+
 // prettier-ignore
 export type PickCurrent<$Document> =
 	// Include all non-new and non-deprecated fields
 	{
 		[
 			$Key in keyof $Document as
-				'__new__' extends keyof NonNullable<$Document[$Key]> ?
+				IsNew<NonNullable<$Document[$Key]>> extends true ?
 					never :
-				'__deprecated__' extends keyof NonNullable<$Document[$Key]> ?
+				IsDeprecated<NonNullable<$Document[$Key]>> extends true ?
 					never :
 				$Key
 		]: $Document[$Key]
@@ -15,7 +31,7 @@ export type PickCurrent<$Document> =
 	{
 		[
 			$Key in keyof $Document as
-				'__deprecated__' extends keyof NonNullable<$Document[$Key]> ?
+				IsDeprecated<NonNullable<$Document[$Key]>> extends true ?
 					$Key :
 				never
 		]?: undefined
@@ -24,7 +40,7 @@ export type PickCurrent<$Document> =
 	{
 		[
 			$Key in keyof $Document as
-				'__new__' extends keyof NonNullable<$Document[$Key]> ?
+			 	IsNew<NonNullable<$Document[$Key]>> extends true ?
 					$Key :
 				never
 		]-?: Exclude<$Document[$Key], undefined>
@@ -36,9 +52,9 @@ export type PickDeprecated<$Document> =
 	{
 		[
 			$Key in keyof $Document as
-				'__new__' extends keyof NonNullable<$Document[$Key]> ?
+				IsNew<NonNullable<$Document[$Key]>> extends true ?
 					never :
-				'__deprecated__' extends keyof NonNullable<$Document[$Key]> ?
+				IsDeprecated<NonNullable<$Document[$Key]>> extends true ?
 					never :
 				$Key
 		]: $Document[$Key]
@@ -47,8 +63,7 @@ export type PickDeprecated<$Document> =
 	{
 		[
 			$Key in keyof $Document as
-				// Exclude deprecated fields so they can be made required
-				'__new__' extends keyof NonNullable<$Document[$Key]> ?
+				IsNew<NonNullable<$Document[$Key]>> extends true ?
 					$Key :
 				never
 		]?: undefined
@@ -57,7 +72,7 @@ export type PickDeprecated<$Document> =
 	{
 		[
 			$Key in keyof $Document as
-				'__deprecated__' extends keyof NonNullable<$Document[$Key]> ?
+				IsDeprecated<NonNullable<$Document[$Key]>> extends true ?
 					$Key :
 				never
 		]-?: Exclude<$Document[$Key], undefined>

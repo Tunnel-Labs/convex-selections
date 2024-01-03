@@ -8,7 +8,7 @@ import type { Table } from '~/types/table.ts';
 import type { Virtual, VirtualArray } from '~/types/virtual.js';
 
 // prettier-ignore
-declare function table<
+export function table<
 	$TableName extends string,
 	$DocumentSchema extends Validator<Record<string, any>, false, any>,
 	$SetTableIndexes extends (
