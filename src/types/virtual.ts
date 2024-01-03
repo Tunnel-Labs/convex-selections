@@ -1,8 +1,10 @@
+import { Tagged } from 'type-fest';
+
 export type Virtual<$TableName extends string> =
-	| `__VIRTUAL__:${$TableName}`
+	| Tagged<$TableName, '__virtual__'>
 	| undefined
 	| null;
 export type VirtualArray<$TableName extends string> =
-	| `__VIRTUAL__:${$TableName}`[]
+	| Tagged<$TableName, '__virtualArray__'>
 	| undefined
 	| null;
