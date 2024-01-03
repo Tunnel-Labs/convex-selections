@@ -1,7 +1,7 @@
 import type { TableDefinition } from 'convex/server';
 import type { GenericId, Infer } from 'convex/values';
 import type { Validator } from 'convex/values';
-import type { IsAny } from 'type-fest';
+import type { IsAny, UnwrapTagged } from 'type-fest';
 
 import type { ExtractDocument, ExtractFieldPaths } from '~/types/convex.js';
 import type { Table } from '~/types/table.ts';
@@ -43,9 +43,11 @@ export function table<
 					onDelete: 'Cascade' | 'Restrict' | 'SetNull'
 				} :
 			NonNullable<Infer<$DocumentSchema>[$Field]> extends Virtual<infer $TableName> ?
-				{ foreignIndex: string, foreignTable: $TableName, type: 'virtual' } :
+				// @ts-expect-error: can be tagged
+				{ foreignIndex: string, foreignTable: UnwrapTagged<$TableName>, type: 'virtual' } :
 			NonNullable<Infer<$DocumentSchema>[$Field]> extends VirtualArray<infer $TableName> ?
-				{ foreignIndex: string, foreignTable: $TableName, type: 'virtualArray' } :
+				// @ts-expect-error: can be tagged
+				{ foreignIndex: string, foreignTable: UnwrapTagged<$TableName>, type: 'virtualArray' } :
 			never
 	}
 ) =>
