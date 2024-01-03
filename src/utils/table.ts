@@ -29,12 +29,8 @@ export function table<
 					$Field :
 				NonNullable<Infer<$DocumentSchema>[$Field]> extends Virtual<string> ?
 					$Field :
-				NonNullable<Infer<$DocumentSchema>[$Field]> extends Array<infer $Item> ?
-					IsAny<$Item> extends true ?
-						never :
-					NonNullable<Infer<$DocumentSchema>[$Field]> extends VirtualArray<string> ?
-						$Field :
-					never :
+				NonNullable<Infer<$DocumentSchema>[$Field]> extends VirtualArray<string> ?
+					$Field :
 				never
 		]:
 			NonNullable<Infer<$DocumentSchema>[$Field]> extends GenericId<infer $TableName> ?
@@ -48,12 +44,8 @@ export function table<
 				} :
 			NonNullable<Infer<$DocumentSchema>[$Field]> extends Virtual<infer $TableName> ?
 				{ foreignIndex: string, foreignTable: $TableName, type: 'virtual' } :
-			NonNullable<Infer<$DocumentSchema>[$Field]> extends Array<infer $Item> ?
-				IsAny<$Item> extends true ?
-					never :
-				NonNullable<Infer<$DocumentSchema>[$Field]> extends VirtualArray<infer $TableName> ?
-					{ foreignIndex: string, foreignTable: $TableName, type: 'virtualArray' } :
-				never :
+			NonNullable<Infer<$DocumentSchema>[$Field]> extends VirtualArray<infer $TableName> ?
+				{ foreignIndex: string, foreignTable: $TableName, type: 'virtualArray' } :
 			never
 	}
 ) =>
