@@ -1,4 +1,4 @@
-import type { GetTags, Tagged } from '~/types/tagged.js';
+import type { GetTags, Tagged } from '../types/tagged.js';
 
 export type Virtual<$TableName extends string> =
 	| Tagged<$TableName, '__virtual__'>

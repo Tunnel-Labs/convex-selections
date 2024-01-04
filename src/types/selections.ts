@@ -1,6 +1,6 @@
 import { AnyDataModel } from 'convex/server';
 import type { UnionToIntersection } from 'type-fest';
-import type { SelectInputFromDataModel } from '~/types/select.js';
+import type { SelectInputFromDataModel } from '../types/select.js';
 
 // prettier-ignore
 export type ExpandMapping<$SelectionMappings, $Options> = {

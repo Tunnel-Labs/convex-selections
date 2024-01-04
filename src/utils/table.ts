@@ -1,16 +1,12 @@
 import type { TableDefinition } from 'convex/server';
 import type { GenericId, Infer } from 'convex/values';
 import type { Validator } from 'convex/values';
-import type { UnwrapTagged } from '~/types/tagged.js';
 
-import type { ExtractDocument, ExtractFieldPaths } from '~/types/convex.js';
-import type { Table } from '~/types/table.ts';
-import type {
-	IsVirtual,
-	IsVirtualArray,
-	Virtual,
-	VirtualArray
-} from '~/types/virtual.js';
+import type { ExtractDocument, ExtractFieldPaths } from '../types/convex.js';
+import type { UnwrapTagged } from '../types/tagged.js';
+import type { Table } from '../types/table.ts';
+import type { IsVirtual, IsVirtualArray } from '../types/virtual.js';
+import type { IsNew } from '../types/variant.js';
 
 // prettier-ignore
 export function table<
@@ -27,7 +23,7 @@ export function table<
 	documentSchema: $DocumentSchema,
 	setTableIndexes: $SetTableIndexes,
 ): (
-	relations: {
+	config: {
 		[
 			$Field in keyof Infer<$DocumentSchema> as
 				NonNullable<Infer<$DocumentSchema>[$Field]> extends GenericId<string> ?
@@ -36,8 +32,17 @@ export function table<
 					$Field :
 				IsVirtualArray<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
 					$Field :
+				IsNew<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
+					$Field :
 				never
 		]:
+			(
+				IsNew<Infer<$DocumentSchema>[$Field]> extends true ?
+					{
+						default: (document: Infer<$DocumentSchema>) => Exclude<Infer<$DocumentSchema>[$Field], undefined>
+					} :
+				{}
+			) &
 			NonNullable<Infer<$DocumentSchema>[$Field]> extends GenericId<infer $TableName> ?
 				{
 					foreignTable: $TableName,
@@ -59,7 +64,7 @@ export function table<
 					foreignTable: UnwrapTagged<NonNullable<Infer<$DocumentSchema>[$Field]>>,
 					type: 'virtualArray'
 				} :
-			never
+			{}
 	}
 ) =>
 	ReturnType<$SetTableIndexes> extends TableDefinition<any, any, infer $Indexes, infer $SearchIndexes, infer $VectorIndexes> ?

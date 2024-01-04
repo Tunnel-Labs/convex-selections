@@ -1,5 +1,5 @@
 import { v, type Validator } from 'convex/values';
-import { Tagged } from '~/types/tagged.js';
+import type { Tagged } from '../types/tagged.js';
 
 /**
 	Deprecated fields are read-only fields. Since we stop writing to them, they can be optional.

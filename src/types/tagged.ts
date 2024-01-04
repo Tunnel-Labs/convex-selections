@@ -1,5 +1,7 @@
+declare const tag: unique symbol;
+
 type MultiTagContainer<Token extends PropertyKey> = {
-	readonly __tag__?: { [K in Token]: void };
+	readonly [tag]?: { [K in Token]: void };
 };
 
 export type UnwrapTagged<TaggedType extends MultiTagContainer<PropertyKey>> =

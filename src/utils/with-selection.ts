@@ -2,12 +2,12 @@ import { AnyDataModel } from 'convex/server';
 import { sha256 } from 'js-sha256';
 import sortKeys from 'sort-keys';
 
-import type { ProcedureReturnType } from '~/types/procedure.js';
-import type { TableNameFromProcedureCallback } from '~/types/schema.js';
+import type { ProcedureReturnType } from '../types/procedure.js';
+import type { TableNameFromProcedureCallback } from '../types/schema.js';
 import type {
 	SelectInputFromDataModel,
 	SelectOutputFromDataModel
-} from '~/types/select.js';
+} from '../types/select.js';
 
 export function createWithSelection<$DataModel extends AnyDataModel>({
 	selectionHashes

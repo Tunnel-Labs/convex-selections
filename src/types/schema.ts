@@ -1,6 +1,6 @@
 import { AnyDataModel } from 'convex/server';
-import type { ProcedureReturnType } from '~/types/procedure.js';
-import type { SelectOutputFromDataModel } from '~/types/select.js';
+import type { ProcedureReturnType } from '../types/procedure.js';
+import type { SelectOutputFromDataModel } from '../types/select.js';
 
 export type TableNameFromProcedureCallback<
 	$DataModel extends AnyDataModel,

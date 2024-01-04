@@ -1,4 +1,4 @@
-import type { GetTags, Tagged, UnwrapTagged } from '~/types/tagged.js';
+import type { GetTags, UnwrapTagged } from '../types/tagged.js';
 
 export type IsNew<$Value> = '__new__' extends GetTags<NonNullable<$Value>>
 	? true

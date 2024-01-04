@@ -1,4 +1,4 @@
-import type { Table } from '~/types/table.js';
+import type { Table } from '../types/table.js';
 
 export function virtual<$ForeignTable extends Table<any, any, any>>(
 	foreignTable: $ForeignTable extends Table<infer $TableName, any, any>

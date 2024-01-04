@@ -3,8 +3,8 @@ import { deepmerge } from 'deepmerge-ts';
 import { merge } from 'merge';
 import type { Exact, Simplify, UnionToIntersection } from 'type-fest';
 
-import type { ExpandSelections } from '~/types/selections.js';
-import type { SelectInputFromDataModel } from '~/types/select.js';
+import type { ExpandSelections } from '../types/selections.js';
+import type { SelectInputFromDataModel } from '../types/select.js';
 
 export function expandSelections<
 	$SelectionMapping extends Record<string, Record<string, unknown>>

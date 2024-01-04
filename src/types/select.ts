@@ -1,13 +1,8 @@
 import { AnyDataModel } from 'convex/server';
 import type { GenericId } from 'convex/values';
-import { UnwrapTagged } from '~/index.js';
-import { PickCurrent, PickDeprecated } from '~/types/variant.js';
-import type {
-	IsVirtual,
-	IsVirtualArray,
-	Virtual,
-	VirtualArray
-} from '~/types/virtual.js';
+import type { UnwrapTagged } from '../types/tagged.js';
+import type { PickCurrent, PickDeprecated } from '../types/variant.js';
+import type { IsVirtual, IsVirtualArray } from '../types/virtual.js';
 
 // prettier-ignore
 export type SelectInputFromDataModel<
