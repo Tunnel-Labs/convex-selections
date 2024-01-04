@@ -43,7 +43,8 @@ export type PickCurrent<$Document> =
 			 	IsNew<NonNullable<$Document[$Key]>> extends true ?
 					$Key :
 				never
-		]-?: Exclude<$Document[$Key], undefined>
+				// @ts-expect-error: will be tagged
+		]-?: UnwrapTagged<Exclude<$Document[$Key], undefined>>
 	};
 
 // prettier-ignore
@@ -75,5 +76,6 @@ export type PickDeprecated<$Document> =
 				IsDeprecated<NonNullable<$Document[$Key]>> extends true ?
 					$Key :
 				never
-		]-?: Exclude<$Document[$Key], undefined>
+				// @ts-expect-error: will be tagged
+		]-?: UnwrapTagged<Exclude<$Document[$Key], undefined>>
 	};
