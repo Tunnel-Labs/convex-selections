@@ -1,15 +1,11 @@
-import type { Tagged, UnwrapTagged } from '~/types/tagged.js';
+import type { GetTags, Tagged, UnwrapTagged } from '~/types/tagged.js';
 
-export type IsNew<$Value> = NonNullable<$Value> extends Tagged<
-	NonNullable<$Value>,
-	'__new__'
->
+export type IsNew<$Value> = '__new__' extends GetTags<NonNullable<$Value>>
 	? true
 	: false;
 
-export type IsDeprecated<$Value> = NonNullable<$Value> extends Tagged<
-	NonNullable<$Value>,
-	'__deprecated__'
+export type IsDeprecated<$Value> = '__deprecated__' extends GetTags<
+	NonNullable<$Value>
 >
 	? true
 	: false;

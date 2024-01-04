@@ -1,7 +1,13 @@
 import { AnyDataModel } from 'convex/server';
 import type { GenericId } from 'convex/values';
+import { UnwrapTagged } from '~/index.js';
 import { PickCurrent, PickDeprecated } from '~/types/variant.js';
-import type { Virtual, VirtualArray } from '~/types/virtual.js';
+import type {
+	IsVirtual,
+	IsVirtualArray,
+	Virtual,
+	VirtualArray
+} from '~/types/virtual.js';
 
 // prettier-ignore
 export type SelectInputFromDataModel<
@@ -17,20 +23,45 @@ export type SelectInputFromDataModel<
 					$SelectedTableName extends $TableName ?
 						true :
 					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
-				NonNullable<$Item> extends VirtualArray<infer $SelectedTableName> ?
-					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
-				NonNullable<$Item> extends Virtual<infer $SelectedTableName> ?
-					{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
+				IsVirtualArray<NonNullable<$Item>> extends true ?
+					{
+						select: SelectInputFromDataModel<
+							$DataModel,
+							// @ts-expect-error: works
+							UnwrapTagged<NonNullable<$Item>>,
+							$WithCid
+						>
+					} :
+				IsVirtual<NonNullable<$Item>> extends true ?
+					{
+						select: SelectInputFromDataModel<
+							$DataModel,
+							// @ts-expect-error: works
+							UnwrapTagged<NonNullable<$Item>>,
+							$WithCid
+						>
+					} :
 				true :
 
 			NonNullable<$DataModel[$TableName]['document'][K]> extends GenericId<infer $SelectedTableName> ?
 				$SelectedTableName extends $TableName ?
 					true :
 				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
-			NonNullable<$DataModel[$TableName]['document'][K]> extends VirtualArray<infer $SelectedTableName> ?
-				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
-			NonNullable<$DataModel[$TableName]['document'][K]> extends Virtual<infer $SelectedTableName> ?
-				{ select: SelectInputFromDataModel<$DataModel, $SelectedTableName, $WithCid> } :
+			IsVirtualArray<NonNullable<$DataModel[$TableName]['document'][K]>> extends true ?
+				{
+					select: SelectInputFromDataModel<
+						$DataModel,
+						UnwrapTagged<NonNullable<$DataModel[$TableName]['document'][K]>>,
+						$WithCid
+					> } :
+			IsVirtual<NonNullable<$DataModel[$TableName]['document'][K]>> extends true ?
+				{
+					select: SelectInputFromDataModel<
+						$DataModel,
+						UnwrapTagged<NonNullable<$DataModel[$TableName]['document'][K]>>,
+						$WithCid
+					>
+				} :
 
 			true
 	};
@@ -57,10 +88,10 @@ export type SelectOutputValue<
 						$NestedSelect
 					>[] |
 					(null extends $DataModel[$TableName]['document'][K] ? null : never) :
-				NonNullable<$DataModel[$TableName]['document'][K]> extends VirtualArray<infer $RefTableName> ?
+				IsVirtualArray<NonNullable<$DataModel[$TableName]['document'][K]>> extends true ?
 					SelectOutputFromDataModel<
 						$DataModel,
-						$RefTableName,
+						UnwrapTagged<NonNullable<$DataModel[$TableName]['document'][K]>>,
 						// @ts-expect-error: works
 						$NestedSelect
 					>[] :
@@ -72,10 +103,10 @@ export type SelectOutputValue<
 						$NestedSelect
 					> |
 					(null extends $DataModel[$TableName]['document'][K] ? null : never) :
-				NonNullable<$DataModel[$TableName]['document'][K]> extends Virtual<infer $RefTableName> ?
+				IsVirtual<NonNullable<$DataModel[$TableName]['document'][K]>> extends true ?
 					SelectOutputFromDataModel<
 						$DataModel,
-						$RefTableName,
+						UnwrapTagged<NonNullable<$DataModel[$TableName]['document'][K]>>,
 						// @ts-expect-error: works
 						$NestedSelect
 					> |

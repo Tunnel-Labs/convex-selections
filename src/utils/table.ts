@@ -5,7 +5,12 @@ import type { UnwrapTagged } from '~/types/tagged.js';
 
 import type { ExtractDocument, ExtractFieldPaths } from '~/types/convex.js';
 import type { Table } from '~/types/table.ts';
-import type { Virtual, VirtualArray } from '~/types/virtual.js';
+import type {
+	IsVirtual,
+	IsVirtualArray,
+	Virtual,
+	VirtualArray
+} from '~/types/virtual.js';
 
 // prettier-ignore
 export function table<
@@ -27,9 +32,9 @@ export function table<
 			$Field in keyof Infer<$DocumentSchema> as
 				NonNullable<Infer<$DocumentSchema>[$Field]> extends GenericId<string> ?
 					$Field :
-				NonNullable<Infer<$DocumentSchema>[$Field]> extends Virtual<string> ?
+				IsVirtual<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
 					$Field :
-				NonNullable<Infer<$DocumentSchema>[$Field]> extends VirtualArray<string> ?
+				IsVirtualArray<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
 					$Field :
 				never
 		]:
@@ -42,12 +47,18 @@ export function table<
 						never,
 					onDelete: 'Cascade' | 'Restrict' | 'SetNull'
 				} :
-			NonNullable<Infer<$DocumentSchema>[$Field]> extends Virtual<infer $TableName> ?
-				// @ts-expect-error: can be tagged
-				{ foreignIndex: string, foreignTable: UnwrapTagged<$TableName>, type: 'virtual' } :
-			NonNullable<Infer<$DocumentSchema>[$Field]> extends VirtualArray<infer $TableName> ?
-				// @ts-expect-error: can be tagged
-				{ foreignIndex: string, foreignTable: UnwrapTagged<$TableName>, type: 'virtualArray' } :
+			IsVirtual<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
+				{
+					foreignIndex: string,
+					foreignTable: UnwrapTagged<NonNullable<Infer<$DocumentSchema>[$Field]>>,
+					type: 'virtual'
+				} :
+			IsVirtualArray<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
+				{
+					foreignIndex: string,
+					foreignTable: UnwrapTagged<NonNullable<Infer<$DocumentSchema>[$Field]>>,
+					type: 'virtualArray'
+				} :
 			never
 	}
 ) =>
