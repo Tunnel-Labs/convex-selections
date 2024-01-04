@@ -6,7 +6,8 @@ import type { ExtractDocument, ExtractFieldPaths } from '../types/convex.js';
 import type { UnwrapTagged } from '../types/tagged.js';
 import type { Table } from '../types/table.ts';
 import type { IsVirtual, IsVirtualArray } from '../types/virtual.js';
-import type { IsNew } from '../types/variant.js';
+import type { IsNew, PickDeprecated } from '../types/variant.js';
+import { Get } from 'type-fest';
 
 // prettier-ignore
 export function table<
@@ -23,49 +24,65 @@ export function table<
 	documentSchema: $DocumentSchema,
 	setTableIndexes: $SetTableIndexes,
 ): (
-	config: {
-		[
-			$Field in keyof Infer<$DocumentSchema> as
-				NonNullable<Infer<$DocumentSchema>[$Field]> extends GenericId<string> ?
-					$Field :
-				IsVirtual<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
-					$Field :
-				IsVirtualArray<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
-					$Field :
-				IsNew<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
-					$Field :
-				never
-		]:
-			(
-				IsNew<Infer<$DocumentSchema>[$Field]> extends true ?
+	config:
+		// Top-level fields
+		{
+			[
+				$Field in keyof Infer<$DocumentSchema> as
+					NonNullable<Infer<$DocumentSchema>[$Field]> extends GenericId<string> ?
+						$Field :
+					IsVirtual<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
+						$Field :
+					IsVirtualArray<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
+						$Field :
+					never
+			]-?:
+				(
+					IsNew<Infer<$DocumentSchema>[$Field]> extends true ?
+						{
+							default: (document: Infer<$DocumentSchema>) => Exclude<Infer<$DocumentSchema>[$Field], undefined>
+						} :
+					{}
+				) &
+				NonNullable<Infer<$DocumentSchema>[$Field]> extends GenericId<infer $TableName> ?
 					{
-						default: (document: Infer<$DocumentSchema>) => Exclude<Infer<$DocumentSchema>[$Field], undefined>
+						foreignTable: $TableName,
+						hostIndex:
+							ReturnType<$SetTableIndexes> extends TableDefinition<any, any, infer $Indexes> ?
+								keyof $Indexes :
+							never,
+						onDelete: 'Cascade' | 'Restrict' | 'SetNull'
+					} :
+				IsVirtual<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
+					{
+						foreignIndex: string,
+						foreignTable: UnwrapTagged<NonNullable<Infer<$DocumentSchema>[$Field]>>,
+						type: 'virtual'
+					} :
+				IsVirtualArray<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
+					{
+						foreignIndex: string,
+						foreignTable: UnwrapTagged<NonNullable<Infer<$DocumentSchema>[$Field]>>,
+						type: 'virtualArray'
 					} :
 				{}
-			) &
-			NonNullable<Infer<$DocumentSchema>[$Field]> extends GenericId<infer $TableName> ?
-				{
-					foreignTable: $TableName,
-					hostIndex:
-						ReturnType<$SetTableIndexes> extends TableDefinition<any, any, infer $Indexes> ?
-							keyof $Indexes :
-						never,
-					onDelete: 'Cascade' | 'Restrict' | 'SetNull'
-				} :
-			IsVirtual<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
-				{
-					foreignIndex: string,
-					foreignTable: UnwrapTagged<NonNullable<Infer<$DocumentSchema>[$Field]>>,
-					type: 'virtual'
-				} :
-			IsVirtualArray<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
-				{
-					foreignIndex: string,
-					foreignTable: UnwrapTagged<NonNullable<Infer<$DocumentSchema>[$Field]>>,
-					type: 'virtualArray'
-				} :
-			{}
-	}
+		} &
+		// All field paths that contain `vNew`
+		{
+			[
+				$FieldPath in ExtractFieldPaths<$DocumentSchema> as
+					$FieldPath extends '_creationTime' ?
+						never :
+					IsNew<Get<Infer<$DocumentSchema>, $FieldPath>> extends true ?
+						$FieldPath :
+					never
+			]-?:
+				IsNew<Get<Infer<$DocumentSchema>, $FieldPath>> extends true ?
+					{
+						default: (document: PickDeprecated<Infer<$DocumentSchema>>) => Exclude<Get<Infer<$DocumentSchema>, $FieldPath>, undefined>
+					} :
+				{}
+		}
 ) =>
 	ReturnType<$SetTableIndexes> extends TableDefinition<any, any, infer $Indexes, infer $SearchIndexes, infer $VectorIndexes> ?
 		Table<
