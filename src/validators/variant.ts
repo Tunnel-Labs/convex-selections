@@ -1,5 +1,5 @@
 import { v, type Validator } from 'convex/values';
-import { Tagged } from 'type-fest';
+import { Tagged } from '~/types/tagged.js';
 
 /**
 	Deprecated fields are read-only fields. Since we stop writing to them, they can be optional.
@@ -8,11 +8,6 @@ export function vDeprecated<$Type>(
 	_message: string
 ): Validator<Tagged<$Type, '__deprecated__'>, true, string> {
 	return v.optional(v.any()) as any;
-}
-
-// prettier-ignore
-export function vDeprecatedTable(): Validator<any, false, string> {
-	return v.any() as any;
 }
 
 /**

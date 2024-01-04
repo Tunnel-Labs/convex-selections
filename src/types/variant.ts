@@ -1,4 +1,4 @@
-import { Tagged, UnwrapTagged } from 'type-fest';
+import type { Tagged, UnwrapTagged } from '~/types/tagged.js';
 
 export type IsNew<$Value> = NonNullable<$Value> extends Tagged<
 	NonNullable<$Value>,

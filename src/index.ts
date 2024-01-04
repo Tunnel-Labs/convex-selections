@@ -8,7 +8,7 @@ export { virtual, virtualArray } from './utils/relation.js';
 export { vNullable } from './validators/nullable.js';
 export { table } from './utils/table.js';
 export { vVirtual, vVirtualArray } from './validators/virtual.js';
-export { vDeprecated, vDeprecatedTable, vNew } from './validators/variant.js';
+export { vDeprecated, vNew } from './validators/variant.js';
 
 export type * from './types/convex.js';
 export type * from './types/index.js';
@@ -17,5 +17,6 @@ export type * from './types/schema.js';
 export type * from './types/select.js';
 export type * from './types/selections.js';
 export type * from './types/table.js';
+export type * from './types/tagged.js';
 export type * from './types/variant.js';
 export type * from './types/virtual.js';

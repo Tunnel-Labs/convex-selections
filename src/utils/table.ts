@@ -1,7 +1,7 @@
 import type { TableDefinition } from 'convex/server';
 import type { GenericId, Infer } from 'convex/values';
 import type { Validator } from 'convex/values';
-import type { IsAny, UnwrapTagged } from 'type-fest';
+import type { UnwrapTagged } from '~/types/tagged.js';
 
 import type { ExtractDocument, ExtractFieldPaths } from '~/types/convex.js';
 import type { Table } from '~/types/table.ts';

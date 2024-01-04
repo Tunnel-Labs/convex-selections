@@ -1,5 +1,5 @@
 import { Validator, v } from 'convex/values';
-import { Tagged } from 'type-fest';
+import { Tagged } from '~/types/tagged.js';
 
 export function vVirtual<$TableName extends string>(
 	foreignTableName: $TableName,
