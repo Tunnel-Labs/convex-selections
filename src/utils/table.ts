@@ -97,12 +97,12 @@ export function table(
 	tableName: string,
 	documentSchema: Validator<Record<string, any>, false, any>,
 	setTableIndexes: (table: TableDefinition) => TableDefinition
-): (relations: Record<string, any>) => Table {
-	return (relations) => {
+): (configuration: Record<string, any>) => Table {
+	return (configuration) => {
 		// @ts-expect-error: Custom property
 		table.onDelete ??= new Map();
 
-		for (const [field, fieldValue] of Object.entries(relations)) {
+		for (const [field, fieldValue] of Object.entries(configuration)) {
 			if (!('onDelete' in fieldValue)) continue;
 
 			// We treat the current table as the table that is affected by the deletion
@@ -126,7 +126,7 @@ export function table(
 		return {
 			tableName,
 			schema: documentSchema,
-			relations,
+			configuration,
 			setTableIndexes
 		};
 	};

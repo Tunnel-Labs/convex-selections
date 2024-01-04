@@ -15,8 +15,9 @@ export interface Table<
 > {
 	tableName: $TableName;
 	schema: $DocumentSchema;
-	relations: Record<
+	configuration: Record<
 		string,
+		| { default?: (document: any) => any }
 		// Virtual relations
 		| {
 				foreignTable: string;
