@@ -7,7 +7,7 @@ import type { Tagged } from '../types/tagged.js';
 export function vDeprecated<$Type>(
 	_message: string
 ): Validator<Tagged<$Type, '__deprecated__'>, true, string> {
-	return v.optional(v.any()) as any;
+	return Object.assign(v.optional(v.any()), { __deprecated: true }) as any;
 }
 
 /**
@@ -24,5 +24,5 @@ export function vNew<$Validator extends Validator<any, any, any>>(
 			$FieldPaths
 	  >
 	: never {
-	return v.optional(validator) as any;
+	return Object.assign(v.optional(validator), { __new: true }) as any;
 }
