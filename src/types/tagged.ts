@@ -1,6 +1,6 @@
 declare const tag: unique symbol;
 
-type MultiTagContainer<Token extends PropertyKey> = {
+export type MultiTagContainer<Token extends PropertyKey> = {
 	readonly [tag]?: { [K in Token]: void };
 };
 

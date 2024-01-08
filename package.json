@@ -2,7 +2,7 @@
 	"name": "corvex",
 	"root": true,
 	"type": "module",
-	"version": "0.0.18",
+	"version": "0.0.22",
 	"exports": {
 		".": "./src/index.ts",
 		"./hashes": "./src/hashes.ts"

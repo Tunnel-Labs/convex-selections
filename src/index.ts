@@ -11,6 +11,7 @@ export { vVirtual, vVirtualArray } from './validators/virtual.js';
 export { vDeprecated, vNew } from './validators/variant.js';
 
 export type * from './types/convex.js';
+export type * from './types/exact.js';
 export type * from './types/index.js';
 export type * from './types/procedure.js';
 export type * from './types/schema.js';
