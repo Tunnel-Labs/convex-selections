@@ -2,6 +2,8 @@
 
 import type { MultiTagContainer } from '~/types/tagged.js';
 
+export type IsNever<T> = [T] extends [never] ? true : false;
+
 // prettier-ignore
 export type ArrayElement<T> = T extends readonly unknown[] ? T[0] : never;
 
@@ -21,7 +23,12 @@ export type KeysOfUnion<ObjectType> = ObjectType extends unknown
 	: never;
 
 // prettier-ignore
-type ExactObject<ParameterType, InputType> = {[Key in keyof ParameterType]: Exact<ParameterType[Key], ObjectValue<InputType, Key>>}
+type ExactObject<ParameterType, InputType> = {
+	[Key in keyof ParameterType]:
+		IsNever<ObjectValue<InputType, Key>> extends true ?
+			ParameterType[Key] :
+		Exact<ParameterType[Key], ObjectValue<InputType, Key>>
+}
 & Record<Exclude<keyof InputType, KeysOfUnion<ParameterType>>, never>;
 
 // prettier-ignore
