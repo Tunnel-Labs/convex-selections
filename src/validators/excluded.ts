@@ -5,12 +5,11 @@ export function vExcluded<
 	$Validator extends Validator<any, any, any>,
 >(
 	validator: $Validator,
-): $Validator extends Validator<infer $TypeScriptType, any, infer $FieldPaths> ?
+): $Validator extends Validator<infer $TypeScriptType, infer $Optional, infer $FieldPaths> ?
 	Validator<
 		| Labeled<$TypeScriptType, '__excluded__'>
-		| undefined
 		| (null extends $TypeScriptType ? null : never),
-		true,
+		$Optional,
 		$FieldPaths
 	> :
 	never
