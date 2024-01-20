@@ -1,4 +1,4 @@
-import type { GetLabels, UnwrapLabeled } from '../types/labeled.js';
+import type { GetLabels, RemoveLabels } from '../types/labeled.js';
 
 export type IsNew<$Value> = '__new__' extends GetLabels<NonNullable<$Value>>
 	? true
@@ -39,8 +39,7 @@ export type PickCurrent<$Document> =
 			 	IsNew<NonNullable<$Document[$Key]>> extends true ?
 					$Key :
 				never
-				// @ts-expect-error: will be Labeled
-		]-?: UnwrapLabeled<Exclude<$Document[$Key], undefined>>
+		]-?: RemoveLabels<Exclude<$Document[$Key], undefined>, '__new__'>
 	};
 
 // prettier-ignore
@@ -72,6 +71,5 @@ export type PickDeprecated<$Document> =
 				IsDeprecated<NonNullable<$Document[$Key]>> extends true ?
 					$Key :
 				never
-				// @ts-expect-error: will be Labeled
-		]-?: UnwrapLabeled<Exclude<$Document[$Key], undefined>>
+		]-?: RemoveLabels<Exclude<$Document[$Key], undefined>, '__deprecated__'>
 	};
