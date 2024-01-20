@@ -26,7 +26,7 @@ export type RemoveLabels<
 	T,
 	LabelsToRemove extends string
 > = T extends MultiLabelContainer<infer ExistingLabels>
-	? MultiLabelContainer<
+	? RemoveAllLabels<T> & MultiLabelContainer<
 			Exclude<ExistingLabels, LabelsToRemove>
 	  >
 	: T;
