@@ -1,6 +1,6 @@
 // dprint-ignore-file
 
-import type { MultiTagContainer } from '~/types/tagged.js';
+import type { MultiLabelContainer } from '~/types/label.js';
 
 export type IsNever<T> = [T] extends [never] ? true : false;
 
@@ -38,7 +38,7 @@ export type Exact<ParameterType, InputType> =
 		: ParameterType extends unknown[] ? Array<Exact<ArrayElement<ParameterType>, ArrayElement<InputType>>>
 			// In TypeScript, Array is a subtype of ReadonlyArray, so always test Array before ReadonlyArray.
 			: ParameterType extends readonly unknown[] ? ReadonlyArray<Exact<ArrayElement<ParameterType>, ArrayElement<InputType>>>
-				// Leave tagged types as-is. We could try to make the untagged part Exact, and just leave the tag as-is, but that seems to create instanitation excessively deep errors.
-				: ParameterType extends MultiTagContainer<any> ? ParameterType
+				// Leave Labeled types as-is. We could try to make the unLabeled part Exact, and just leave the tag as-is, but that seems to create instantiation excessively deep errors.
+				: ParameterType extends MultiLabelContainer<any> ? ParameterType
 					: ParameterType extends object ? ExactObject<ParameterType, InputType>
 						: ParameterType;

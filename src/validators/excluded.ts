@@ -1,5 +1,5 @@
 import type { Validator } from "convex/values";
-import type { Tagged } from "type-fest";
+import type { Labeled } from '../types/Labeled.js';
 
 export function vExcluded<
 	$Validator extends Validator<any, any, any>,
@@ -7,7 +7,7 @@ export function vExcluded<
 	validator: $Validator,
 ): $Validator extends Validator<infer $TypeScriptType, any, infer $FieldPaths> ?
 	Validator<
-		| Tagged<$TypeScriptType, '__excluded__'>
+		| Labeled<$TypeScriptType, '__excluded__'>
 		| undefined
 		| (null extends $TypeScriptType ? null : never),
 		true,

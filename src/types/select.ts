@@ -1,6 +1,6 @@
 import { AnyDataModel } from 'convex/server';
 import type { GenericId } from 'convex/values';
-import type { UnwrapTagged } from '../types/tagged.js';
+import type { UnwrapLabeled } from '../types/Labeled.js';
 import type { PickCurrent, PickDeprecated } from '../types/variant.js';
 import type { IsVirtual, IsVirtualArray } from '../types/virtual.js';
 
@@ -23,7 +23,7 @@ export type SelectInputFromDataModel<
 						select: SelectInputFromDataModel<
 							$DataModel,
 							// @ts-expect-error: works
-							UnwrapTagged<NonNullable<$Item>>,
+							UnwrapLabeled<NonNullable<$Item>>,
 							$WithCid
 						>
 					} :
@@ -32,7 +32,7 @@ export type SelectInputFromDataModel<
 						select: SelectInputFromDataModel<
 							$DataModel,
 							// @ts-expect-error: works
-							UnwrapTagged<NonNullable<$Item>>,
+							UnwrapLabeled<NonNullable<$Item>>,
 							$WithCid
 						>
 					} :
@@ -46,14 +46,14 @@ export type SelectInputFromDataModel<
 				{
 					select: SelectInputFromDataModel<
 						$DataModel,
-						UnwrapTagged<NonNullable<$DataModel[$TableName]['document'][K]>>,
+						UnwrapLabeled<NonNullable<$DataModel[$TableName]['document'][K]>>,
 						$WithCid
 					> } :
 			IsVirtual<NonNullable<$DataModel[$TableName]['document'][K]>> extends true ?
 				{
 					select: SelectInputFromDataModel<
 						$DataModel,
-						UnwrapTagged<NonNullable<$DataModel[$TableName]['document'][K]>>,
+						UnwrapLabeled<NonNullable<$DataModel[$TableName]['document'][K]>>,
 						$WithCid
 					>
 				} :
@@ -86,7 +86,7 @@ export type SelectOutputValue<
 				IsVirtualArray<NonNullable<$DataModel[$TableName]['document'][K]>> extends true ?
 					SelectOutputFromDataModel<
 						$DataModel,
-						UnwrapTagged<NonNullable<$DataModel[$TableName]['document'][K]>>,
+						UnwrapLabeled<NonNullable<$DataModel[$TableName]['document'][K]>>,
 						// @ts-expect-error: works
 						$NestedSelect
 					>[] :
@@ -101,7 +101,7 @@ export type SelectOutputValue<
 				IsVirtual<NonNullable<$DataModel[$TableName]['document'][K]>> extends true ?
 					SelectOutputFromDataModel<
 						$DataModel,
-						UnwrapTagged<NonNullable<$DataModel[$TableName]['document'][K]>>,
+						UnwrapLabeled<NonNullable<$DataModel[$TableName]['document'][K]>>,
 						// @ts-expect-error: works
 						$NestedSelect
 					> |

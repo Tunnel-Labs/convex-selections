@@ -3,7 +3,7 @@ import type { GenericId, Infer } from 'convex/values';
 import type { Validator } from 'convex/values';
 
 import type { ExtractDocument, ExtractFieldPaths } from '../types/convex.js';
-import type { UnwrapTagged } from '../types/tagged.js';
+import type { UnwrapLabeled } from '../types/Labeled.js';
 import type { Table } from '../types/table.ts';
 import type { IsVirtual, IsVirtualArray } from '../types/virtual.js';
 import type { IsNew, PickDeprecated } from '../types/variant.js';
@@ -56,13 +56,13 @@ export function table<
 				IsVirtual<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
 					{
 						foreignIndex: string,
-						foreignTable: UnwrapTagged<NonNullable<Infer<$DocumentSchema>[$Field]>>,
+						foreignTable: UnwrapLabeled<NonNullable<Infer<$DocumentSchema>[$Field]>>,
 						type: 'virtual'
 					} :
 				IsVirtualArray<NonNullable<Infer<$DocumentSchema>[$Field]>> extends true ?
 					{
 						foreignIndex: string,
-						foreignTable: UnwrapTagged<NonNullable<Infer<$DocumentSchema>[$Field]>>,
+						foreignTable: UnwrapLabeled<NonNullable<Infer<$DocumentSchema>[$Field]>>,
 						type: 'virtualArray'
 					} :
 				{}

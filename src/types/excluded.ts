@@ -1,5 +1,5 @@
-import type { GetTags } from '../types/tagged.js';
+import type { GetLabels } from '../types/Labeled.js';
 
-export type IsExcluded<$Value> = '__excluded__' extends GetTags<NonNullable<$Value>>
+export type IsExcluded<$Value> = '__excluded__' extends GetLabels<NonNullable<$Value>>
 	? true
 	: false;
