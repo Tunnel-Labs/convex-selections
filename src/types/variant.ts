@@ -1,4 +1,4 @@
-import type { GetLabels, UnwrapLabeled } from '../types/Labeled.js';
+import type { GetLabels, UnwrapLabeled } from '../types/labeled.js';
 
 export type IsNew<$Value> = '__new__' extends GetLabels<NonNullable<$Value>>
 	? true

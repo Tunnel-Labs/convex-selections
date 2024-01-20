@@ -3,7 +3,7 @@ import type { GenericId, Infer } from 'convex/values';
 import type { Validator } from 'convex/values';
 
 import type { ExtractDocument, ExtractFieldPaths } from '../types/convex.js';
-import type { UnwrapLabeled } from '../types/Labeled.js';
+import type { UnwrapLabeled } from '../types/labeled.js';
 import type { Table } from '../types/table.ts';
 import type { IsVirtual, IsVirtualArray } from '../types/virtual.js';
 import type { IsNew, PickDeprecated } from '../types/variant.js';

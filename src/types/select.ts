@@ -1,6 +1,6 @@
 import { AnyDataModel } from 'convex/server';
 import type { GenericId } from 'convex/values';
-import type { UnwrapLabeled } from '../types/Labeled.js';
+import type { UnwrapLabeled } from '../types/labeled.js';
 import type { PickCurrent, PickDeprecated } from '../types/variant.js';
 import type { IsVirtual, IsVirtualArray } from '../types/virtual.js';
 

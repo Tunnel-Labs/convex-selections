@@ -1,4 +1,4 @@
-import type { GetLabels, Labeled } from '../types/Labeled.js';
+import type { GetLabels, Labeled } from '../types/labeled.js';
 
 export type Virtual<$TableName extends string> =
 	| Labeled<$TableName, '__virtual__'>
