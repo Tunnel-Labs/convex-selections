@@ -4,11 +4,19 @@
 	"type": "module",
 	"version": "0.0.25",
 	"exports": {
-		".": "./src/$.ts",
-		"./hashes": "./src/hashes.ts"
+		".": {
+			"import": "./dist/$.mjs",
+			"require": "./dist/$.cjs",
+			"types": "./dist/$.d.ts"
+		},
+		"./hashes": {
+			"import": "./dist/hashes.mjs",
+			"require": "./dist/hashes.cjs",
+			"types": "./dist/hashes.d.ts"
+		}
 	},
 	"scripts": {
-		"build": "tun ./scripts/build.ts"
+		"build": "pkgroll"
 	},
 	"peerDependencies": {
 		"convex": "^1.4.1"
@@ -22,7 +30,6 @@
 		"fast-glob": "^3.3.1",
 		"get-monorepo-root": "^1.1.0",
 		"json5": "^2.2.3",
-		"map-obj": "^5.0.2",
 		"merge": "^2.1.1",
 		"js-sha256": "^0.10.1",
 		"pathe": "^1.1.1",
@@ -32,9 +39,11 @@
 	},
 	"devDependencies": {
 		"convex": "^1.4.1",
+		"@tunnel/tsconfig": "^0.0.0",
 		"@tunnel/tun": "^0.1.2",
 		"@types/node": "^20.7.1",
-		"typescript": "^5.2.2",
-		"lionconfig": "^3.1.1"
-	}
+		"pkgroll": "2.0.1",
+		"typescript": "^5.2.2"
+	},
+	"files": ["dist"]
 }
