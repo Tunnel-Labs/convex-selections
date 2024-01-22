@@ -6,7 +6,12 @@ import type { Labeled } from '../types/labeled.js';
 */
 export function vDeprecated<$Type>(
 	_message: string
-): Validator<Labeled<$Type, '__deprecated__'>, true, string> {
+): Validator<
+	Labeled<NonNullable<$Type>, '__deprecated__'> |
+	(null extends $Type ? null | never),
+	true,
+	string
+> {
 	const objectValidator = v.optional(v.any());
 	// @ts-expect-error: internal property
 	objectValidator.json.__deprecated = true;
