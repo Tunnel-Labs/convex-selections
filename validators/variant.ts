@@ -1,14 +1,14 @@
+import type { Labeled } from '#types/$.ts';
 import { v, type Validator } from 'convex/values';
-import type { Labeled } from '../types/labeled.js';
 
 /**
 	Deprecated fields are read-only fields. Since we stop writing to them, they can be optional.
 */
 export function vDeprecated<$Type>(
-	_message: string
+	_message: string,
 ): Validator<
-	Labeled<NonNullable<$Type>, '__deprecated__'> |
-	(null extends $Type ? null | never),
+	| Labeled<NonNullable<$Type>, '__deprecated__'>
+	| (null extends $Type ? null : never),
 	true,
 	string
 > {
@@ -22,16 +22,17 @@ export function vDeprecated<$Type>(
 	A newly added property, meaning that it can be optional.
 */
 export function vNew<$Validator extends Validator<any, any, any>>(
-	validator: $Validator
+	validator: $Validator,
 ): $Validator extends Validator<infer $TypeScriptType, any, infer $FieldPaths>
 	? Validator<
-			| Labeled<$TypeScriptType, '__new__'>
-			| undefined
-			| (null extends $TypeScriptType ? null : never),
-			true,
-			$FieldPaths
-	  >
-	: never {
+		| Labeled<$TypeScriptType, '__new__'>
+		| undefined
+		| (null extends $TypeScriptType ? null : never),
+		true,
+		$FieldPaths
+	>
+	: never
+{
 	const objectValidator = v.optional(v.any());
 	// @ts-expect-error: internal property
 	objectValidator.json.__new = true;

@@ -1,16 +1,17 @@
-import type { GetLabels, RemoveLabels } from '../types/labeled.js';
+// dprint-ignore-file
+//
+import type { GetLabels, RemoveLabels } from '#types/$.ts';
 
-export type IsNew<$Value> = '__new__' extends GetLabels<NonNullable<$Value>>
-	? true
-	: false;
+export type IsNew<$Value> =
+	'__new__' extends GetLabels<NonNullable<$Value>> ?
+		true :
+	false;
 
-export type IsDeprecated<$Value> = '__deprecated__' extends GetLabels<
-	NonNullable<$Value>
->
-	? true
-	: false;
+export type IsDeprecated<$Value> =
+	'__deprecated__' extends GetLabels<NonNullable<$Value>> ?
+		true :
+	false;
 
-// prettier-ignore
 export type PickCurrent<$Document> =
 	// Include all non-new and non-deprecated fields
 	{
@@ -42,7 +43,6 @@ export type PickCurrent<$Document> =
 		]-?: RemoveLabels<Exclude<$Document[$Key], undefined>, '__new__'>
 	};
 
-// prettier-ignore
 export type PickDeprecated<$Document> =
 	// Include all non-new and non-deprecated fields
 	{
@@ -73,3 +73,10 @@ export type PickDeprecated<$Document> =
 				never
 		]-?: RemoveLabels<Exclude<$Document[$Key], undefined>, '__deprecated__'>
 	};
+
+export type CurrentDocument<$Document> = PickCurrent<$Document>;
+
+/**
+	A `DeprecatedDoc` is a wrapper around a convex `Doc` that includes all deprecated fields and omits all new fields required.
+*/
+export type DeprecatedDocument<$Document> = PickDeprecated<$Document>;

@@ -2,6 +2,7 @@
 	"typescript": {
 		"lineWidth": 80,
 		"indentWidth": 2,
+		"quoteStyle": "preferSingle",
 		"useTabs": true,
 	},
 	"plugins": [

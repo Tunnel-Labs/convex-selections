@@ -1,10 +1,14 @@
+import type {
+	IsVirtual,
+	IsVirtualArray,
+	PickCurrent,
+	PickDeprecated,
+	UnwrapLabeled,
+} from '#types/$.ts';
 import { AnyDataModel } from 'convex/server';
 import type { GenericId } from 'convex/values';
-import type { UnwrapLabeled } from '../types/labeled.js';
-import type { PickCurrent, PickDeprecated } from '../types/variant.js';
-import type { IsVirtual, IsVirtualArray } from '../types/virtual.js';
 
-// prettier-ignore
+// dprint-ignore
 export type SelectInputFromDataModel<
 	$DataModel extends AnyDataModel,
 	$TableName extends string,
@@ -61,7 +65,7 @@ export type SelectInputFromDataModel<
 			true
 	};
 
-// prettier-ignore
+// dprint-ignore
 export type SelectOutputValue<
 	$DataModel extends AnyDataModel,
 	$TableName extends string,
@@ -111,7 +115,7 @@ export type SelectOutputValue<
 		never
 }
 
-// prettier-ignore
+// dprint-ignore
 export type SelectOutputFromDataModel<
 	$DataModel extends AnyDataModel,
 	$TableName extends string,

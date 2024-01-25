@@ -1,3 +1,5 @@
+// dprint-ignore-file
+
 declare const label: unique symbol;
 
 export type MultiLabelContainer<Token extends PropertyKey> = {

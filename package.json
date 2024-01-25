@@ -3,16 +3,14 @@
 	"root": true,
 	"type": "module",
 	"version": "0.0.28",
+	"imports": {
+		"#types/*": "./types"
+	},
 	"exports": {
 		".": {
 			"import": "./dist/$.mjs",
 			"require": "./dist/$.cjs",
 			"types": "./dist/$.d.ts"
-		},
-		"./hashes": {
-			"import": "./dist/hashes.mjs",
-			"require": "./dist/hashes.cjs",
-			"types": "./dist/hashes.d.ts"
 		}
 	},
 	"scripts": {
@@ -39,6 +37,7 @@
 	},
 	"devDependencies": {
 		"convex": "^1.4.1",
+		"dprint": "^0.45.0",
 		"@tunnel/tsconfig": "^0.0.0",
 		"@tunnel/tun": "^0.1.2",
 		"@types/node": "^20.7.1",
