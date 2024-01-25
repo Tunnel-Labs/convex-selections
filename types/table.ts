@@ -1,6 +1,5 @@
 import type {
 	DeprecatedDocument,
-	IsId,
 	IsNew,
 	IsRelation,
 	IsTransformed,
@@ -9,10 +8,10 @@ import type {
 	SetTableIndexes,
 	UnwrapLabeled,
 } from '#types/_.ts';
-import {
-	type GenericTableIndexes,
-	type GenericTableSearchIndexes,
-	type GenericTableVectorIndexes,
+import type {
+	GenericTableIndexes,
+	GenericTableSearchIndexes,
+	GenericTableVectorIndexes,
 	TableDefinition,
 } from 'convex/server';
 import type { GenericId, Infer, Validator } from 'convex/values';
@@ -58,12 +57,13 @@ export type TableConfiguration<
 			: never
 	]-?:
 		& (
-			IsTransformed<Infer<$DocumentSchema>[$Field]> extends true ? {
+			IsTransformed<Infer<$DocumentSchema>[$Field]> extends true ?
+				{
 					transform(
 						document: DeprecatedDocument<Infer<$DocumentSchema>>,
 					): Infer<$DocumentSchema>[$Field];
-				}
-				: {}
+				} :
+			{}
 		)
 		& (
 			IsNew<Infer<$DocumentSchema>[$Field]> extends true ? {
@@ -73,26 +73,31 @@ export type TableConfiguration<
 				}
 				: {}
 		)
-		& NonNullable<Infer<$DocumentSchema>[$Field]> extends GenericId<infer $ForeignTableName> ? {
-			foreignTable: $ForeignTableName;
-			hostIndex: ReturnType<$SetTableIndexes> extends
-				TableDefinition<any, any, infer $Indexes> ? keyof $Indexes
-				: never;
-			onDelete: 'Cascade' | 'Restrict' | 'SetNull';
-		}
-		: IsVirtual<Infer<$DocumentSchema>[$Field]> extends true ? {
-				foreignIndex: string;
-				foreignTable: UnwrapLabeled<
-					NonNullable<Infer<$DocumentSchema>[$Field]>
-				>;
-				type: 'virtual';
-			}
-		: IsVirtualArray<Infer<$DocumentSchema>[$Field]> extends true ? {
-				foreignIndex: string;
-				foreignTable: UnwrapLabeled<
-					NonNullable<Infer<$DocumentSchema>[$Field]>
-				>;
-				type: 'virtualArray';
-			}
-		: {};
+		& (
+			NonNullable<Infer<$DocumentSchema>[$Field]> extends GenericId<infer $ForeignTableName> ?
+				{
+					foreignTable: $ForeignTableName;
+					hostIndex: ReturnType<$SetTableIndexes> extends
+						TableDefinition<any, any, infer $Indexes> ? keyof $Indexes
+						: never;
+					onDelete: 'Cascade' | 'Restrict' | 'SetNull';
+				} :
+			IsVirtual<Infer<$DocumentSchema>[$Field]> extends true ?
+				{
+					foreignIndex: string;
+					foreignTable: UnwrapLabeled<
+						NonNullable<Infer<$DocumentSchema>[$Field]>
+					>;
+					type: 'virtual';
+				} :
+			IsVirtualArray<Infer<$DocumentSchema>[$Field]> extends true ?
+				{
+					foreignIndex: string;
+					foreignTable: UnwrapLabeled<
+						NonNullable<Infer<$DocumentSchema>[$Field]>
+					>;
+					type: 'virtualArray';
+				} :
+			{}
+		);
 };

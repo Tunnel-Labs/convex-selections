@@ -2,7 +2,7 @@
   "name": "corvex",
   "root": true,
   "type": "module",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "imports": {
     "#types/*": "./types/*"
   },
@@ -14,6 +14,7 @@
     }
   },
   "scripts": {
+		"prepublish": "unbuild",
     "build": "unbuild"
   },
   "peerDependencies": {
