@@ -1,23 +1,16 @@
 import { Labeled } from '#types/_.ts';
 import { v } from 'convex/values';
 import type { Infer, Validator } from 'convex/values';
-import type { RequireAtLeastOne } from 'type-fest';
 
 export function vTransformed<$Validator extends Validator<any, any, any>>(
 	validator: $Validator,
 ): {
-	from<$DeprecatedType>(
-		discriminatorValidator: Validator<
-			RequireAtLeastOne<
-				Omit<$DeprecatedType, keyof NonNullable<Infer<$Validator>>>
-			>,
-			any,
-			any
-		>,
+	from<$DeprecatedValidator extends Validator<any, any, any>>(
+		deprecatedValidator: $DeprecatedValidator,
 	): Validator<
 		| (
 			& Labeled<NonNullable<Infer<$Validator>>, '__transformed__'>
-			& { __deprecatedType__?: $DeprecatedType }
+			& { __deprecatedType__?: Infer<$DeprecatedValidator> }
 		)
 		| (null extends Infer<$Validator> ? null : never),
 		$Validator['isOptional'],
@@ -25,10 +18,10 @@ export function vTransformed<$Validator extends Validator<any, any, any>>(
 	>;
 } {
 	return {
-		from(discriminatorValidator) {
+		from(deprecatedValidator) {
 			// @ts-expect-error: setting a custom property
-			validator.json.__discriminatorValidator = discriminatorValidator;
-			return v.union(validator, discriminatorValidator);
+			validator.json.__deprecatedValidator = deprecatedValidator;
+			return v.union(validator, deprecatedValidator);
 		},
 	};
 }
