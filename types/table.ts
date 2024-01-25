@@ -16,6 +16,7 @@ import type {
 } from 'convex/server';
 import type { GenericId, Infer, Validator } from 'convex/values';
 
+// dprint-ignore
 export interface Table<
 	$TableName extends string = string,
 	$DocumentSchema extends Validator<any, any, any> = Validator<any, any, any>,
@@ -27,15 +28,15 @@ export interface Table<
 	schema: $DocumentSchema;
 	configuration: Record<
 		string,
-		| { default?: (document: any) => any }
+		{ default?: (document: any) => any } |
 		// Virtual relations
-		| {
+		{
 			foreignTable: string;
 			foreignIndex: string;
 			type: 'virtual' | 'virtualArray';
-		}
+		} |
 		// ID relations
-		| {
+		{
 			foreignTable: string;
 			hostIndex: string;
 			onDelete: 'Cascade' | 'Restrict' | 'SetNull';
@@ -44,19 +45,23 @@ export interface Table<
 	setTableIndexes: (table: TableDefinition) => TableDefinition;
 }
 
+// dprint-ignore
 export type TableConfiguration<
 	_$TableName extends string,
 	$DocumentSchema extends Validator<Record<string, any>, false, any>,
 	$SetTableIndexes extends SetTableIndexes<$DocumentSchema>,
 > = {
 	[
-		$Field in keyof Infer<
-			$DocumentSchema
-		> as IsRelation<Infer<$DocumentSchema>[$Field]> extends true ? $Field
-			: IsTransformed<Infer<$DocumentSchema>[$Field]> extends true ? $Field
-			: never
+		$Field in keyof Infer<$DocumentSchema> as
+			IsRelation<Infer<$DocumentSchema>[$Field]> extends true ?
+				$Field :
+			IsNew<Infer<$DocumentSchema>[$Field]> extends true ?
+				$Field :
+			IsTransformed<Infer<$DocumentSchema>[$Field]> extends true ?
+				$Field :
+			never
 	]-?:
-		& (
+		(
 			IsTransformed<Infer<$DocumentSchema>[$Field]> extends true ?
 				{
 					transform(
@@ -64,16 +69,16 @@ export type TableConfiguration<
 					): Infer<$DocumentSchema>[$Field];
 				} :
 			{}
-		)
-		& (
+		) &
+		(
 			IsNew<Infer<$DocumentSchema>[$Field]> extends true ? {
 					default(
 						document: DeprecatedDocument<Infer<$DocumentSchema>>,
 					): Exclude<Infer<$DocumentSchema>[$Field], undefined>;
 				}
 				: {}
-		)
-		& (
+		) &
+		(
 			NonNullable<Infer<$DocumentSchema>[$Field]> extends GenericId<infer $ForeignTableName> ?
 				{
 					foreignTable: $ForeignTableName;
