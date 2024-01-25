@@ -1,6 +1,6 @@
 // dprint-ignore-file
 //
-import type { GetLabels, RemoveLabels } from '#types/_.ts';
+import type { GetLabels, IsTransformed, RemoveLabels, TransformedDeprecatedType } from '#types/_.ts';
 
 export type IsNew<$Value> =
 	'__new__' extends GetLabels<NonNullable<$Value>> ?
@@ -53,7 +53,11 @@ export type PickDeprecated<$Document> =
 				IsDeprecated<NonNullable<$Document[$Key]>> extends true ?
 					never :
 				$Key
-		]: $Document[$Key]
+		]:
+			// Use the deprecated type for transformed fields
+			IsTransformed<$Document[$Key]> extends true ?
+				TransformedDeprecatedType<$Document[$Key]> :
+			$Document[$Key]
 	} &
 	// Set new fields to undefined
 	{
@@ -72,7 +76,7 @@ export type PickDeprecated<$Document> =
 					$Key :
 				never
 		]-?: RemoveLabels<Exclude<$Document[$Key], undefined>, '__deprecated__'>
-	};
+	}
 
 export type CurrentDocument<$Document> = PickCurrent<$Document>;
 

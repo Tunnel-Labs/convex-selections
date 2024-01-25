@@ -1,4 +1,5 @@
 import { Labeled } from '#types/_.ts';
+import { v } from 'convex/values';
 import type { Infer, Validator } from 'convex/values';
 import type { RequireAtLeastOne } from 'type-fest';
 
@@ -27,7 +28,7 @@ export function vTransformed<$Validator extends Validator<any, any, any>>(
 		from(discriminatorValidator) {
 			// @ts-expect-error: setting a custom property
 			validator.__discriminatorValidator = discriminatorValidator;
-			return validator;
+			return v.union(validator, discriminatorValidator);
 		},
 	};
 }
