@@ -2,7 +2,7 @@
   "name": "corvex",
   "root": true,
   "type": "module",
-  "version": "0.0.29",
+  "version": "0.0.31",
   "imports": {
     "#types/*": "./types/*"
   },

@@ -15,7 +15,7 @@ import {
 	type GenericTableVectorIndexes,
 	TableDefinition,
 } from 'convex/server';
-import type { Infer, Validator } from 'convex/values';
+import type { GenericId, Infer, Validator } from 'convex/values';
 
 export interface Table<
 	$TableName extends string = string,
@@ -46,7 +46,7 @@ export interface Table<
 }
 
 export type TableConfiguration<
-	$TableName extends string,
+	_$TableName extends string,
 	$DocumentSchema extends Validator<Record<string, any>, false, any>,
 	$SetTableIndexes extends SetTableIndexes<$DocumentSchema>,
 > = {
@@ -73,8 +73,8 @@ export type TableConfiguration<
 				}
 				: {}
 		)
-		& IsId<Infer<$DocumentSchema>[$Field]> extends true ? {
-			foreignTable: $TableName;
+		& NonNullable<Infer<$DocumentSchema>[$Field]> extends GenericId<infer $ForeignTableName> ? {
+			foreignTable: $ForeignTableName;
 			hostIndex: ReturnType<$SetTableIndexes> extends
 				TableDefinition<any, any, infer $Indexes> ? keyof $Indexes
 				: never;
