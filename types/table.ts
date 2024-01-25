@@ -1,14 +1,14 @@
-import {
+import type {
 	DeprecatedDocument,
 	IsId,
 	IsNew,
 	IsRelation,
+	IsTransformed,
 	IsVirtual,
 	IsVirtualArray,
 	SetTableIndexes,
 	UnwrapLabeled,
-} from '#types/$.ts';
-import { IsTransformed } from '#types/transformed.ts';
+} from '#types/_.ts';
 import {
 	type GenericTableIndexes,
 	type GenericTableSearchIndexes,
@@ -48,7 +48,7 @@ export interface Table<
 export type TableConfiguration<
 	$TableName extends string,
 	$DocumentSchema extends Validator<Record<string, any>, false, any>,
-	$SetTableIndexes extends SetTableIndexes<$DocumentSchema>
+	$SetTableIndexes extends SetTableIndexes<$DocumentSchema>,
 > = {
 	[
 		$Field in keyof Infer<

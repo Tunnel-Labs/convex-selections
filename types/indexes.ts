@@ -2,8 +2,8 @@ import type {
 	AnyDocumentSchema,
 	ExtractDocument,
 	ExtractFieldPaths,
-} from '#types/$.ts';
-import { TableDefinition } from 'convex/server';
+} from '#types/_.ts';
+import type { TableDefinition } from 'convex/server';
 
 export type GetIndexesFromTable<$Table> = $Table extends TableDefinition<
 	any,

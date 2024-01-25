@@ -1,4 +1,4 @@
-import type { Labeled } from '#types/$.ts';
+import type { Labeled } from '#types/_.ts';
 import { v, Validator } from 'convex/values';
 
 export function vVirtual<$TableName extends string>(

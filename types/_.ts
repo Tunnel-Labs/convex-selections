@@ -7,4 +7,5 @@ export type * from './labeled.ts';
 export type * from './relation.ts';
 export type * from './select.ts';
 export type * from './table.ts';
+export type * from './transformed.ts';
 export type * from './variant.ts';

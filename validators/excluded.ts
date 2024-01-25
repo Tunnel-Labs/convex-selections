@@ -1,5 +1,5 @@
 import type { Validator } from "convex/values";
-import type { Labeled } from '#types/$.ts';
+import type { Labeled } from '#types/_.ts';
 
 export function vExcluded<
 	$Validator extends Validator<any, any, any>,

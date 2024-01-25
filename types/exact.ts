@@ -1,6 +1,6 @@
 // dprint-ignore-file
 
-import type { MultiLabelContainer } from '#types/$.ts';
+import type { MultiLabelContainer } from '#types/_.ts';
 
 export type IsNever<T> = [T] extends [never] ? true : false;
 

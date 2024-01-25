@@ -1,4 +1,4 @@
-import type { GetLabels } from "#types/$.ts";
+import type { GetLabels } from "#types/_.ts";
 
 // dprint-ignore
 export type IsExcluded<$Value> =

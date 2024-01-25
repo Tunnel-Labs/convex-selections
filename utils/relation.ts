@@ -1,4 +1,4 @@
-import type { Table } from "#types/$.ts";
+import type { Table } from "#types/_.ts";
 
 export function virtual<$ForeignTable extends Table<any, any, any>>(
 	foreignTable: $ForeignTable extends Table<infer $TableName, any, any>

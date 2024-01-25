@@ -1,4 +1,4 @@
-import { Labeled } from '#types/$.ts';
+import { Labeled } from '#types/_.ts';
 import type { Infer, Validator } from 'convex/values';
 import type { RequireAtLeastOne } from 'type-fest';
 
