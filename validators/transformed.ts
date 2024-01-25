@@ -27,7 +27,7 @@ export function vTransformed<$Validator extends Validator<any, any, any>>(
 	return {
 		from(discriminatorValidator) {
 			// @ts-expect-error: setting a custom property
-			validator.__discriminatorValidator = discriminatorValidator;
+			validator.json.__discriminatorValidator = discriminatorValidator;
 			return v.union(validator, discriminatorValidator);
 		},
 	};
