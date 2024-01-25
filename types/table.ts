@@ -67,6 +67,9 @@ export type TableConfiguration<
 					transform(
 						document: DeprecatedDocument<Infer<$DocumentSchema>>,
 					): Infer<$DocumentSchema>[$Field];
+					isDeprecated(
+						document: Infer<$DocumentSchema> | DeprecatedDocument<Infer<$DocumentSchema>>
+					): boolean
 				} :
 			{}
 		) &
