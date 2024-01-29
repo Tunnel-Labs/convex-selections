@@ -64,8 +64,11 @@ export type TableConfiguration<
 		(
 			IsTransformed<Infer<$DocumentSchema>[$Field]> extends true ?
 				{
-					transform(
-						document: DeprecatedDocument<Infer<$DocumentSchema>>,
+					// dprint-ignore
+					transform(document:
+						DeprecatedDocument<Infer<$DocumentSchema>> &
+						// Making sure the field to be transformed is present on the type (it might be wrapped in a `vNew` and thus might not be present in the `DeprecatedDocument` type
+						Record<$Field, Infer<$DocumentSchema>[$Field]>
 					): Infer<$DocumentSchema>[$Field];
 					isDeprecated(
 						document: Infer<$DocumentSchema> | DeprecatedDocument<Infer<$DocumentSchema>>
