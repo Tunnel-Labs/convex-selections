@@ -6,14 +6,14 @@ export function vExcluded<
 >(
 	validator: $Validator,
 ): $Validator extends
-	Validator<infer $TypeScriptType, infer $Optional, infer $FieldPaths>
-	? Validator<
+	Validator<infer $TypeScriptType, infer $Optional, infer $FieldPaths> ?
+	Validator<
 		| Labeled<$TypeScriptType, '__excluded__'>
 		| (null extends $TypeScriptType ? null : never),
 		$Optional,
 		$FieldPaths
-	>
-	: never
+	> :
+	never
 {
 	// @ts-expect-error: internal property
 	validator.json.__excluded = true;

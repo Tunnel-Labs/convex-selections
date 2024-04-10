@@ -1,12 +1,12 @@
 import type { Table } from '#types';
 
 export function virtual<$ForeignTable extends Table<any, any, any>>(
-	foreignTable: $ForeignTable extends Table<infer $TableName, any, any>
-		? $TableName
-		: never,
-	foreignIndex: $ForeignTable extends Table<any, any, infer $TableIndexes>
-		? keyof $TableIndexes
-		: never,
+	foreignTable: $ForeignTable extends Table<infer $TableName, any, any> ?
+		$TableName :
+		never,
+	foreignIndex: $ForeignTable extends Table<any, any, infer $TableIndexes> ?
+		keyof $TableIndexes :
+		never,
 ) {
 	return {
 		foreignTable,
@@ -16,12 +16,12 @@ export function virtual<$ForeignTable extends Table<any, any, any>>(
 }
 
 export function virtualArray<$ForeignTable extends Table<any, any, any>>(
-	foreignTable: $ForeignTable extends Table<infer $TableName, any, any>
-		? $TableName
-		: never,
-	foreignIndex: $ForeignTable extends Table<any, any, infer $TableIndexes>
-		? keyof $TableIndexes
-		: never,
+	foreignTable: $ForeignTable extends Table<infer $TableName, any, any> ?
+		$TableName :
+		never,
+	foreignIndex: $ForeignTable extends Table<any, any, infer $TableIndexes> ?
+		keyof $TableIndexes :
+		never,
 ) {
 	return {
 		foreignTable,

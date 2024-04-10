@@ -23,15 +23,15 @@ export function vDeprecated<$Type>(
 */
 export function vNew<$Validator extends Validator<any, any, any>>(
 	validator: $Validator,
-): $Validator extends Validator<infer $TypeScriptType, any, infer $FieldPaths>
-	? Validator<
+): $Validator extends Validator<infer $TypeScriptType, any, infer $FieldPaths> ?
+	Validator<
 		| Labeled<$TypeScriptType, '__new__'>
 		| undefined
 		| (null extends $TypeScriptType ? null : never),
 		true,
 		$FieldPaths
-	>
-	: never
+	> :
+	never
 {
 	const objectValidator = v.optional(v.any());
 	// @ts-expect-error: internal property

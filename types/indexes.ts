@@ -11,8 +11,8 @@ export type GetIndexesFromTable<$Table> = $Table extends TableDefinition<
 	infer $Indexes,
 	any,
 	any
-> ? $Indexes
-	: never;
+> ? $Indexes :
+	never;
 
 export type SetTableIndexes<$DocumentSchema extends AnyDocumentSchema> = (
 	tableDefinition: TableDefinition<
