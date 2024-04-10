@@ -1,7 +1,7 @@
 {
 	"name": "corvex",
 	"type": "module",
-	"version": "0.0.41",
+	"version": "0.0.42",
 	"imports": {
 		"#types": "./types/_.ts"
 	},
