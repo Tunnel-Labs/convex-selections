@@ -1,8 +1,7 @@
 {
 	"name": "corvex",
-	"root": true,
 	"type": "module",
-	"version": "0.0.39",
+	"version": "0.0.41",
 	"imports": {
 		"#types": "./types/_.ts"
 	},
@@ -21,35 +20,21 @@
 		"convex": "^1.4.1"
 	},
 	"dependencies": {
-		"@typescript-eslint/typescript-estree": "^6.7.3",
-		"@vscode/ripgrep": "^1.15.5",
-		"deepmerge-ts": "5.1.0",
-		"estree-walker": "^3.0.3",
-		"execa": "^8.0.1",
-		"fast-glob": "^3.3.1",
-		"get-monorepo-root": "^1.1.0",
-		"json5": "^2.2.3",
-		"merge": "^2.1.1",
-		"js-sha256": "^0.10.1",
-		"pathe": "^1.1.1",
-		"sort-keys": "^5.0.0",
-		"type-fest": "^4.5.0",
-		"yaml": "^2.3.2"
+		"type-fest": "^4.15.0"
 	},
 	"devDependencies": {
-		"convex": "^1.4.1",
-		"dprint": "^0.45.0",
+		"convex": "^1.11.0",
+		"dprint": "^0.45.1",
 		"@tunnel/tsconfig": "^0.0.0",
-		"@tunnel/tun": "^0.1.2",
 		"@types/node": "^20.7.1",
-		"unbuild": "2.0.0",
-		"typescript": "^5.2.2"
+		"unbuild": "^2.0.0",
+		"typescript": "^5.4.5"
 	},
 	"files": [
 		".build",
+		"exports",
 		"types",
 		"utils",
-		"validators",
-		"_.ts"
+		"validators"
 	]
 }

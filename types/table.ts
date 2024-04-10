@@ -53,10 +53,14 @@ type ShouldFieldHaveConfiguration<
 	$DocumentSchema extends Validator<Record<string, any>, false, any>,
 	$Field extends keyof Infer<$DocumentSchema>
 > =
-	IsComputed<Infer<$DocumentSchema>[$Field]> |
-	IsNew<Infer<$DocumentSchema>[$Field]> |
-	IsRelation<Infer<$DocumentSchema>[$Field]> |
-	IsTransformed<Infer<$DocumentSchema>[$Field]>
+	true extends (
+		IsComputed<Infer<$DocumentSchema>[$Field]> |
+		IsNew<Infer<$DocumentSchema>[$Field]> |
+		IsRelation<Infer<$DocumentSchema>[$Field]> |
+		IsTransformed<Infer<$DocumentSchema>[$Field]>
+	) ?
+		true :
+	false;
 
 // dprint-ignore
 export type TableConfiguration<
