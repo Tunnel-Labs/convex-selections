@@ -1,5 +1,6 @@
 import type {
 	DeprecatedDocument,
+	IsComputed,
 	IsNew,
 	IsRelation,
 	IsTransformed,
@@ -7,8 +8,10 @@ import type {
 	IsVirtualArray,
 	SetTableIndexes,
 	UnwrapLabeled,
-} from '#types/_.ts';
+} from '#types';
 import type {
+	AnyDataModel,
+	GenericQueryCtx,
 	GenericTableIndexes,
 	GenericTableSearchIndexes,
 	GenericTableVectorIndexes,
@@ -46,6 +49,16 @@ export interface Table<
 }
 
 // dprint-ignore
+type ShouldFieldHaveConfiguration<
+	$DocumentSchema extends Validator<Record<string, any>, false, any>,
+	$Field extends keyof Infer<$DocumentSchema>
+> =
+	IsComputed<Infer<$DocumentSchema>[$Field]> |
+	IsNew<Infer<$DocumentSchema>[$Field]> |
+	IsRelation<Infer<$DocumentSchema>[$Field]> |
+	IsTransformed<Infer<$DocumentSchema>[$Field]>
+
+// dprint-ignore
 export type TableConfiguration<
 	_$TableName extends string,
 	$DocumentSchema extends Validator<Record<string, any>, false, any>,
@@ -53,18 +66,34 @@ export type TableConfiguration<
 > = {
 	[
 		$Field in keyof Infer<$DocumentSchema> as
-			IsRelation<Infer<$DocumentSchema>[$Field]> extends true ?
-				$Field :
-			IsNew<Infer<$DocumentSchema>[$Field]> extends true ?
-				$Field :
-			IsTransformed<Infer<$DocumentSchema>[$Field]> extends true ?
+			ShouldFieldHaveConfiguration<$DocumentSchema, $Field> extends true ?
 				$Field :
 			never
 	]-?:
 		(
+			IsComputed<Infer<$DocumentSchema>[$Field]> extends true ?
+				{
+					computed(
+						ctx: GenericQueryCtx<AnyDataModel>,
+						document: Infer<$DocumentSchema>,
+					):
+						UnwrapLabeled<NonNullable<Infer<$DocumentSchema>[$Field]>> |
+						(null extends Infer<$DocumentSchema>[$Field] ? null : never);
+				}
+				: {}
+		) &
+		(
+			IsNew<Infer<$DocumentSchema>[$Field]> extends true ?
+				{
+					default(
+						document: DeprecatedDocument<Infer<$DocumentSchema>>,
+					): Exclude<Infer<$DocumentSchema>[$Field], undefined>;
+				} :
+			{}
+		) &
+		(
 			IsTransformed<Infer<$DocumentSchema>[$Field]> extends true ?
 				{
-					// dprint-ignore
 					transform(document:
 						DeprecatedDocument<Infer<$DocumentSchema>> &
 						// Making sure the field to be transformed is present on the type (it might be wrapped in a `vNew` and thus might not be present in the `DeprecatedDocument` type
@@ -75,14 +104,6 @@ export type TableConfiguration<
 					): boolean
 				} :
 			{}
-		) &
-		(
-			IsNew<Infer<$DocumentSchema>[$Field]> extends true ? {
-					default(
-						document: DeprecatedDocument<Infer<$DocumentSchema>>,
-					): Exclude<Infer<$DocumentSchema>[$Field], undefined>;
-				}
-				: {}
 		) &
 		(
 			NonNullable<Infer<$DocumentSchema>[$Field]> extends GenericId<infer $ForeignTableName> ?

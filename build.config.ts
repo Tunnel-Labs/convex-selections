@@ -1,7 +1,7 @@
 import { defineBuildConfig } from 'unbuild';
 
 export default defineBuildConfig({
-	entries: ['_.ts'],
+	entries: ['./exports/main.ts'],
 	outDir: '.build',
 	declaration: true,
 	rollup: {

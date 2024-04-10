@@ -1,4 +1,4 @@
-import type { SetTableIndexes, Table, TableConfiguration } from '#types/_.ts';
+import type { SetTableIndexes, Table, TableConfiguration } from '#types';
 import type { TableDefinition } from 'convex/server';
 import type { Validator } from 'convex/values';
 

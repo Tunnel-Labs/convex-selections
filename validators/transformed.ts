@@ -1,4 +1,4 @@
-import { Labeled } from '#types/_.ts';
+import { Labeled } from '#types';
 import { v } from 'convex/values';
 import type { Infer, Validator } from 'convex/values';
 

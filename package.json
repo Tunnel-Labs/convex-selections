@@ -4,13 +4,13 @@
 	"type": "module",
 	"version": "0.0.38",
 	"imports": {
-		"#types/*": "./types/*"
+		"#types": "./types/_.ts"
 	},
 	"exports": {
 		".": {
-			"import": "./.build/_.mjs",
-			"require": "./.build/_.cjs",
-			"types": "./.build/_.d.ts"
+			"import": "./.build/exports/main.mjs",
+			"require": "./.build/exports/main.cjs",
+			"types": "./.build/exports/main.d.ts"
 		}
 	},
 	"scripts": {

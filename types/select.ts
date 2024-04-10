@@ -4,7 +4,7 @@ import type {
 	PickCurrent,
 	PickDeprecated,
 	UnwrapLabeled,
-} from '#types/_.ts';
+} from '#types';
 import { AnyDataModel } from 'convex/server';
 import type { GenericId } from 'convex/values';
 

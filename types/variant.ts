@@ -1,6 +1,6 @@
 // dprint-ignore-file
 //
-import type { GetLabels, IsTransformed, RemoveLabels, TransformedDeprecatedType } from '#types/_.ts';
+import type { GetLabels, IsTransformed, RemoveLabels, TransformedDeprecatedType } from '#types';
 
 export type IsNew<$Value> =
 	'__new__' extends GetLabels<NonNullable<$Value>> ?

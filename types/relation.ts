@@ -1,7 +1,7 @@
 // dprint-ignore-file
 
 import type { GenericId } from 'convex/values';
-import type { GetLabels, Labeled } from '#types/_.ts';
+import type { GetLabels, Labeled } from '#types';
 
 export type Virtual<$TableName extends string> =
 	| Labeled<$TableName, '__virtual__'>

@@ -1,3 +1,4 @@
+export type * from './computed.ts';
 export type * from './convex.ts';
 export type * from './document.ts';
 export type * from './exact.ts';

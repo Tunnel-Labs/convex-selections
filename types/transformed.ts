@@ -1,6 +1,6 @@
 // dprint-ignore-file
 //
-import type { GetLabels } from "#types/_.ts";
+import type { GetLabels } from "#types";
 
 export type IsTransformed<$Value> =
 	'__transformed__' extends GetLabels<NonNullable<$Value>> ?
