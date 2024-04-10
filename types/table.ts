@@ -18,6 +18,8 @@ import type {
 	TableDefinition,
 } from 'convex/server';
 import type { GenericId, Infer, Validator } from 'convex/values';
+import type { Promisable } from 'type-fest';
+import type { SystemFields } from 'types/convex.js';
 
 // dprint-ignore
 export interface Table<
@@ -64,7 +66,7 @@ type ShouldFieldHaveConfiguration<
 
 // dprint-ignore
 export type TableConfiguration<
-	_$TableName extends string,
+	$TableName extends string,
 	$DocumentSchema extends Validator<Record<string, any>, false, any>,
 	$SetTableIndexes extends SetTableIndexes<$DocumentSchema>,
 > = {
@@ -79,10 +81,11 @@ export type TableConfiguration<
 				{
 					computed(
 						ctx: GenericQueryCtx<AnyDataModel>,
-						document: Infer<$DocumentSchema>,
-					):
+						document: Infer<$DocumentSchema> & SystemFields & { _id: GenericId<$TableName> },
+					): Promisable<
 						UnwrapLabeled<NonNullable<Infer<$DocumentSchema>[$Field]>> |
-						(null extends Infer<$DocumentSchema>[$Field] ? null : never);
+						(null extends Infer<$DocumentSchema>[$Field] ? null : never)
+					>;
 				}
 				: {}
 		) &

@@ -1,4 +1,4 @@
-import type { Table } from "#types";
+import type { Table } from '#types';
 
 export function virtual<$ForeignTable extends Table<any, any, any>>(
 	foreignTable: $ForeignTable extends Table<infer $TableName, any, any>
@@ -11,7 +11,7 @@ export function virtual<$ForeignTable extends Table<any, any, any>>(
 	return {
 		foreignTable,
 		foreignIndex,
-		type: "virtual",
+		type: 'virtual',
 	} as const;
 }
 
@@ -26,6 +26,6 @@ export function virtualArray<$ForeignTable extends Table<any, any, any>>(
 	return {
 		foreignTable,
 		foreignIndex,
-		type: "virtualArray",
+		type: 'virtualArray',
 	} as const;
 }

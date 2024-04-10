@@ -1,4 +1,4 @@
-import type { GetLabels } from "#types";
+import type { GetLabels } from '#types';
 
 // dprint-ignore
 export type IsComputed<$Value> =

@@ -1,40 +1,41 @@
 {
-	"name": "corvex",
-	"type": "module",
-	"version": "0.0.41",
-	"imports": {
-		"#types": "./types/_.ts"
-	},
-	"exports": {
-		".": {
-			"import": "./.build/exports/main.mjs",
-			"require": "./.build/exports/main.cjs",
-			"types": "./.build/exports/main.d.ts"
-		}
-	},
-	"scripts": {
-		"prepare": "unbuild",
-		"build": "unbuild"
-	},
-	"peerDependencies": {
-		"convex": "^1.4.1"
-	},
-	"dependencies": {
-		"type-fest": "^4.15.0"
-	},
-	"devDependencies": {
-		"convex": "^1.11.0",
-		"dprint": "^0.45.1",
-		"@tunnel/tsconfig": "^0.0.0",
-		"@types/node": "^20.7.1",
-		"unbuild": "^2.0.0",
-		"typescript": "^5.4.5"
-	},
-	"files": [
-		".build",
-		"exports",
-		"types",
-		"utils",
-		"validators"
-	]
+  "name": "corvex",
+  "type": "module",
+  "version": "0.0.41",
+  "imports": {
+    "#types": "./types/_.ts"
+  },
+  "exports": {
+    ".": {
+      "import": "./.build/exports/main.mjs",
+      "require": "./.build/exports/main.cjs",
+      "types": "./.build/exports/main.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "unbuild",
+    "format": "dprint fmt",
+    "prepare": "unbuild"
+  },
+  "peerDependencies": {
+    "convex": "^1.4.1"
+  },
+  "dependencies": {
+    "type-fest": "^4.15.0"
+  },
+  "devDependencies": {
+    "convex": "^1.11.0",
+    "dprint": "^0.45.1",
+    "@tunnel/tsconfig": "^0.0.0",
+    "@types/node": "^20.7.1",
+    "unbuild": "^2.0.0",
+    "typescript": "^5.4.5"
+  },
+  "files": [
+    ".build",
+    "exports",
+    "types",
+    "utils",
+    "validators"
+  ]
 }
